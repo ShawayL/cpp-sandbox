@@ -1,0 +1,25 @@
+{
+    "version": 10,
+    "configurePresets": [
+        {
+            "name": "conf-common",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}"
+        },
+        {
+            "name": "conf-common-debug",
+            "inherits": "conf-common",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "conf-common-release",
+            "inherits": "conf-common",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        }
+    ]
+}
