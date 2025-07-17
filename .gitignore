@@ -1,0 +1,15 @@
+# Build directory.
+build/
+out/
+
+# IDEs / CI temp files
+.vscode/
+.vs/
+.idea/
+.vagrant/
+*.swp
+
+# User spesific settings
+CMakeUserPresets.json
+
+
