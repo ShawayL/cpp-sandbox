@@ -31,37 +31,45 @@ cpp_sandbox_setup_dependencies()
 
 add_subdirectory(src)
 
-# 安装
-install(TARGETS
-  sample_library0
-  sample_library1
-  sample_executable0
-  EXPORT cpp_sandboxTargets
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+# 安装目标
+if(CPP_SANDBOX_INSTALL)
+  install(TARGETS
+    sample_library0
+    sample_library1
+    sample_executable0
+    EXPORT cpp_sandboxTargets
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
 
-install(
-  EXPORT cpp_sandboxTargets
-  NAMESPACE cpp_sandbox::
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-)
+  install(
+    EXPORT cpp_sandboxTargets
+    NAMESPACE cpp_sandbox::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+  )
 
-configure_package_config_file("cmake/${PROJECT_NAME}Config.cmake.in"
-  "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
-  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-)
-
-write_basic_package_version_file(
-  "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
-  COMPATIBILITY SameMajorVersion
-)
-
-install(
-  FILES
+  configure_package_config_file("cmake/${PROJECT_NAME}Config.cmake.in"
     "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+  )
+
+  write_basic_package_version_file(
     "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-)
+    COMPATIBILITY SameMajorVersion
+  )
+
+  install(
+    FILES
+      "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+      "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+  )
+
+  set(CPACK_PACKAGE_FILE_NAME
+    "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_BUILD_TYPE}-${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}"
+  )
+
+  include(CPack)
+endif()

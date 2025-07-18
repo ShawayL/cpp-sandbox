@@ -1,13 +1,15 @@
 macro(cpp_sandbox_setup_options)
   if(NOT PROJECT_IS_TOP_LEVEL)
-
+    option(CPP_SANDBOX_INSTALL "Enable install targets" OFF)
   else()
-
+    option(CPP_SANDBOX_INSTALL "Enable install targets" ON)
   endif()
 
-  option(cpp_sandbox_USE_CPM "Use CPM to setup dependencies" ON)
+  option(CPP_SANDBOX_USE_CPM "Use CPM to setup dependencies" ON)
 
   if(NOT PROJECT_IS_TOP_LEVEL)
-    # mark_as_advanced
+    mark_as_advanced(CPP_SANDBOX_INSTALL
+      CPP_SANDBOX_USE_CPM
+    )
   endif()
 endmacro()

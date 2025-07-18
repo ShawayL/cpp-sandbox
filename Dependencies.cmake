@@ -1,4 +1,4 @@
-if(cpp_sandbox_USE_CPM)
+if(CPP_SANDBOX_USE_CPM)
   include(cmake/CPM.cmake)
 endif()
 
@@ -11,7 +11,7 @@ function(cpp_sandbox_setup_dependencies)
   # already been provided to us by a parent project
 
   #if(NOT TARGET spdlog::spdlog)
-  #  if(cpp_sandbox_USE_CPM)
+  #  if(CPP_SANDBOX_USE_CPM)
   #    cpmaddpackage(
   #      NAME
   #      spdlog
@@ -25,7 +25,7 @@ function(cpp_sandbox_setup_dependencies)
   #endif()
 
   #if(NOT TARGET Catch2::Catch2WithMain)
-  #  if(cpp_sandbox_USE_CPM)
+  #  if(CPP_SANDBOX_USE_CPM)
   #    cpmaddpackage("gh:catchorg/Catch2@3.8.1")
   #  else()
   #    find_package(Catch2 REQUIRED)
