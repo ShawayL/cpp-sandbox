@@ -31,6 +31,11 @@ cpp_sandbox_setup_dependencies()
 
 add_subdirectory(src)
 
+# 添加测试
+if(CPP_SANDBOX_BUILD_TESTS)
+  add_subdirectory(test)
+endif()
+
 # 安装目标
 if(CPP_SANDBOX_INSTALL)
   install(TARGETS
