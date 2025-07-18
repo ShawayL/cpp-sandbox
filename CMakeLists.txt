@@ -8,6 +8,9 @@ project(
   HOMEPAGE_URL "https://github.com/ShawayL/cpp-sandbox"
   LANGUAGES CXX C)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 # 防止源代码目录构建
 include(cmake/PreventInSourceBuilds.cmake)
 
@@ -18,17 +21,19 @@ endif()
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# 设置项目选项
 include(ProjectOptions.cmake)
 cpp_sandbox_setup_options()
 
+# 设置依赖项
 include(Dependencies.cmake)
 cpp_sandbox_setup_dependencies()
 
 add_subdirectory(src)
 
-include(GNUInstallDirs)
-
-install(TARGETS sample_library0
+# 安装
+install(TARGETS
+  sample_library0
   sample_library1
   sample_executable0
   EXPORT cpp_sandboxTargets
@@ -41,5 +46,22 @@ install(TARGETS sample_library0
 install(
   EXPORT cpp_sandboxTargets
   NAMESPACE cpp_sandbox::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+)
+
+configure_package_config_file("cmake/${PROJECT_NAME}Config.cmake.in"
+  "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+)
+
+write_basic_package_version_file(
+  "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  FILES
+    "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+    "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 )
