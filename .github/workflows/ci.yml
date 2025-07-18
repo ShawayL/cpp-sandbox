@@ -11,6 +11,7 @@ jobs:
       ${{ matrix.os }}
       ${{ matrix.compiler }}
       ${{ matrix.optimized && 'release' || 'debug' }}
+      ${{ matrix.build_shared_lib && 'shared_library' || 'static_library' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -43,6 +44,7 @@ jobs:
     env:
       CMAKE_BUILD_DIR: ${{ github.workspace }}/build
       CMAKE_BUILD_TYPE: ${{ matrix.optimized && 'RelWithDebInfo' || 'Debug' }}
+      BUILD_SHARED_LIBS: ${{ matrix.build_shared_lib && 'ON' || 'OFF' }}
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
       BINARY_SUFFIX: ${{ startsWith(matrix.os, 'windows') && '.exe' || '' }}
@@ -61,6 +63,7 @@ jobs:
       run: >-
         cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}"
         -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}
+        -DBUILD_SHARED_LIBS=${{ env.BUILD_SHARED_LIBS }}
         -DCMAKE_INSTALL_PREFIX=${{ runner.temp }}/install_test/
 
     - name: Build
