@@ -7,6 +7,8 @@ namespace sample_library1 {
 
 SAMPLE_LIBRARY1_EXPORT int factorial(int) noexcept;
 
+int factorial_noexp(int) noexcept;
+
 constexpr int factorial_constexpr(int input) noexcept {
   if (input == 0) {
     return 1;

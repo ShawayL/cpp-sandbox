@@ -9,5 +9,8 @@ int main() {
   std::cout << "sample_library1::factorial(6) = "
             << sample_library1::factorial(6) << std::endl;
 
+  //std::cout << "sample_library1::factorial_noexp(6) = "
+  //          << sample_library1::factorial_noexp(6) << std::endl;
+
   return 0;
 }

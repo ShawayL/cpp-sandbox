@@ -5,7 +5,7 @@ add_library(sample_library1)
 add_library(cpp_sandbox::sample_library1 ALIAS sample_library1)
 
 set_target_properties(sample_library1
-  PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
+  PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} CXX_VISIBILITY_PRESET hidden)
 
 generate_export_header(sample_library1 EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library1_export.hpp)
 
