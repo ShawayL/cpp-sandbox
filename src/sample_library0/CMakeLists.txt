@@ -33,20 +33,4 @@ target_sources(sample_library0
       ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0.hpp
       ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library0_export.hpp
 )
-
-#include(GNUInstallDirs)
-#
-#install(TARGETS sample_library0
-#  EXPORT sample_library0Targets
-#  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#  FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-#)
-#
-#install(
-#  EXPORT sample_library0Targets
-#  NAMESPACE cpp_sandbox::
-#  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-#)
                                                                   
