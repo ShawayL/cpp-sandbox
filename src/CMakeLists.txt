@@ -1,0 +1,3 @@
+add_subdirectory(sample_library0)
+add_subdirectory(sample_library1)
+add_subdirectory(sample_executable0)
