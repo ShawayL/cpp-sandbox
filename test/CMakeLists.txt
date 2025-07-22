@@ -1,7 +1,11 @@
 enable_testing()
 include(CTest)
 
-list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+if(DEFINED Catch2_SOURCE_DIR)
+  list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+elseif(DEFINED Catch2_DIR)
+  list(APPEND CMAKE_MODULE_PATH ${Catch2_DIR})
+endif()
 include(Catch)
 
 add_executable(tests tests.cpp)
