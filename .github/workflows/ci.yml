@@ -12,6 +12,7 @@ jobs:
       ${{ matrix.compiler }}
       ${{ matrix.optimized && 'release' || 'debug' }}
       ${{ matrix.build_shared_lib && 'shared_library' || 'static_library' }}
+      ${{ matrix.use_cpm && 'cpm' || 'system_deps' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -20,6 +21,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         optimized: [true, false]
         build_shared_lib: [true, false]
+        use_cpm: [true, false]
         exclude:
         # MSVC only works on Windows.
         - os: ubuntu-latest
@@ -46,6 +48,7 @@ jobs:
       CMAKE_BUILD_DIR: ${{ github.workspace }}/build
       CMAKE_BUILD_TYPE: ${{ matrix.optimized && 'RelWithDebInfo' || 'Debug' }}
       BUILD_SHARED_LIBS: ${{ matrix.build_shared_lib && 'ON' || 'OFF' }}
+      CPP_SANDBOX_USE_CPM: ${{ matrix.use_cpm && 'ON' || 'OFF' }}
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
       BINARY_SUFFIX: ${{ startsWith(matrix.os, 'windows') && '.exe' || '' }}
@@ -60,12 +63,32 @@ jobs:
       with:
         submodules: true
 
+    - name: Install system dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest' && !matrix.use_cpm
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y catch2
+
+    - name: Install system dependencies (macOS)
+      if: matrix.os == 'macos-latest' && !matrix.use_cpm
+      run: |
+        brew install catch2
+
+    - name: Install system dependencies (Windows)
+      if: matrix.os == 'windows-latest' && !matrix.use_cpm
+      run: |
+        vcpkg install catch2:x64-windows
+        echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+      shell: bash
+
     - name: Generate build config
       run: >-
         cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}"
         -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}
         -DBUILD_SHARED_LIBS=${{ env.BUILD_SHARED_LIBS }}
+        -DCPP_SANDBOX_USE_CPM=${{ env.CPP_SANDBOX_USE_CPM }}
         -DCMAKE_INSTALL_PREFIX=${{ runner.temp }}/install_test/
+        ${{ startsWith(matrix.os, 'windows') && !matrix.use_cpm && format('-DCMAKE_TOOLCHAIN_FILE={0}', env.CMAKE_TOOLCHAIN_FILE) || '' }}
 
     - name: Build
       run: >-
