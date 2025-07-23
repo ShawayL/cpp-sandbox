@@ -42,6 +42,7 @@ if(CPP_SANDBOX_INSTALL)
     sample_library0
     sample_library1
     sample_executable0
+    find_submatrix
     EXPORT cpp_sandboxTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
