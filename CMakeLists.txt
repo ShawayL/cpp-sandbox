@@ -8,17 +8,21 @@ project(
   HOMEPAGE_URL "https://github.com/ShawayL/cpp-sandbox"
   LANGUAGES CXX C)
 
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
-
-if(PROJECT_IS_TOP_LEVEL)
-  include(CTest)
-endif()
-
 # 防止源代码目录构建
 include(cmake/PreventInSourceBuilds.cmake)
 
-set(CMAKE_CXX_EXTENSIONS OFF)
+# for CMAKE_INSTALL_BINDIR, CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_INCLUDEDIR
+include(GNUInstallDirs)
+# for configure_package_config_file and write_basic_package_version_file
+include(CMakePackageConfigHelpers)
+
+# 作为顶层项目...
+if(PROJECT_IS_TOP_LEVEL)
+  # 确保使用 -std=c++xx 而非 -std=g++xx
+  set(CMAKE_CXX_EXTENSIONS OFF)
+  # 顶层项目才启用测试支持
+  include(CTest)
+endif()
 
 # 设置项目选项
 include(ProjectOptions.cmake)
