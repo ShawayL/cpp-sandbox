@@ -27,6 +27,8 @@ target_include_directories(sample_library0 PUBLIC $<BUILD_INTERFACE:${PROJECT_SO
                                                  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+target_compile_features(sample_library0 PUBLIC cxx_std_11)
+
 set_target_properties(sample_library0
   PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} CXX_VISIBILITY_PRESET hidden)
 

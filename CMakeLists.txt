@@ -18,11 +18,6 @@ endif()
 # 防止源代码目录构建
 include(cmake/PreventInSourceBuilds.cmake)
 
-# 仅当 CMAKE_CXX_STANDARD 未由其他人设置时才设置
-if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 23)
-endif()
-
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # 设置项目选项
