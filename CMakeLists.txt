@@ -11,6 +11,10 @@ project(
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
+if(PROJECT_IS_TOP_LEVEL)
+  include(CTest)
+endif()
+
 # 防止源代码目录构建
 include(cmake/PreventInSourceBuilds.cmake)
 
@@ -32,7 +36,7 @@ cpp_sandbox_setup_dependencies()
 add_subdirectory(src)
 
 # 添加测试
-if(CPP_SANDBOX_BUILD_TESTS)
+if(CPP_SANDBOX_BUILD_TESTS AND BUILD_TESTING)
   add_subdirectory(test)
 endif()
 

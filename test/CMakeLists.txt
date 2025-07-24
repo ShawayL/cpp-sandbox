@@ -1,6 +1,3 @@
-enable_testing()
-include(CTest)
-
 if(DEFINED Catch2_SOURCE_DIR)
   list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 elseif(DEFINED Catch2_DIR)
