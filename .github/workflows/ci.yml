@@ -51,6 +51,7 @@ jobs:
       CPP_SANDBOX_USE_CPM: ${{ matrix.use_cpm && 'ON' || 'OFF' }}
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
+      CPACK_GENERATOR: ${{ matrix.os == 'windows-latest' && 'ZIP' || 'TGZ' }}
       BINARY_SUFFIX: ${{ startsWith(matrix.os, 'windows') && '.exe' || '' }}
       BINARY_PATH: >-
         ${{ format(
@@ -105,4 +106,4 @@ jobs:
       - name: CPack
         working-directory: ${{ github.workspace }}/build
         run: |
-          cpack -C "${{ env.CMAKE_BUILD_TYPE }}"
+          cpack -C "${{ env.CMAKE_BUILD_TYPE }}" -G "${{ env.CPACK_GENERATOR }}"
