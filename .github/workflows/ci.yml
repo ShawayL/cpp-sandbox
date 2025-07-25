@@ -1,8 +1,13 @@
 name: ci
-on: [push, pull_request]
+on: 
+  push:
+    branches: ["**"]
+    tags:
+      - 'v*'
+  pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-and-test:
@@ -43,6 +48,9 @@ jobs:
           - compiler: gcc
             CC: gcc
             CXX: g++
+          # Only upload packages for CPM builds
+          - use_cpm: true
+            upload_package: true
 
     env:
       CMAKE_BUILD_DIR: ${{ github.workspace }}/build
@@ -60,7 +68,7 @@ jobs:
         matrix.optimized && 'RelWithDebInfo' || 'Debug') }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -107,3 +115,41 @@ jobs:
         working-directory: ${{ github.workspace }}/build
         run: |
           cpack -C "${{ env.CMAKE_BUILD_TYPE }}" -G "${{ env.CPACK_GENERATOR }}"
+
+      - name: Upload package artifacts
+        if: startsWith(github.ref, 'refs/tags/') && matrix.upload_package
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.optimized && 'release' || 'debug' }}-${{ matrix.build_shared_lib && 'shared' || 'static' }}
+          path: |
+            ${{ github.workspace }}/build/*.zip
+            ${{ github.workspace }}/build/*.tar.gz
+          retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            ./artifacts/**/*.zip
+            ./artifacts/**/*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
