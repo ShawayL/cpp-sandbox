@@ -44,6 +44,7 @@ if(CPP_SANDBOX_INSTALL)
   install(TARGETS
     sample_library0
     sample_library1
+    string_converter
     sample_executable0
     find_submatrix
     EXPORT cpp_sandboxTargets

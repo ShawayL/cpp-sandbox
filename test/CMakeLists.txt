@@ -10,6 +10,7 @@ target_link_libraries(
   tests
   PRIVATE cpp_sandbox::sample_library0
           cpp_sandbox::sample_library1
+          cpp_sandbox::string_converter
           Catch2::Catch2WithMain)
 
 catch_discover_tests(tests)
