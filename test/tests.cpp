@@ -35,9 +35,11 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::wstring wide_special = StringConverter::utf8_to_wstring(utf8_special);
         REQUIRE(wide_special == L"Hello! @#$%^&*()");
         
-        // 测试中文字符串
-        std::string utf8_chinese = "你好世界";
-        std::wstring wide_chinese = L"你好世界";
+        // 测试中文字符串 - 使用显式的 UTF-8 字节序列确保跨平台兼容性
+        // "你好世界" 的 UTF-8 编码
+        std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
+        // "你好世界" 的 Unicode 码点
+        std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
         REQUIRE(StringConverter::utf8_to_wstring(utf8_chinese) == wide_chinese);
     }
     
@@ -56,9 +58,11 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string utf8_special = StringConverter::wstring_to_utf8(wide_special);
         REQUIRE(utf8_special == "Hello! @#$%^&*()");
         
-        // 测试中文字符串
-        std::wstring wide_chinese = L"你好世界";
-        std::string utf8_chinese = "你好世界";
+        // 测试中文字符串 - 使用显式的 UTF-8 字节序列确保跨平台兼容性
+        // "你好世界" 的 Unicode 码点
+        std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
+        // "你好世界" 的 UTF-8 编码
+        std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
         REQUIRE(StringConverter::wstring_to_utf8(wide_chinese) == utf8_chinese);
     }
     

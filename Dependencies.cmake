@@ -34,4 +34,10 @@ function(cpp_sandbox_setup_dependencies)
     endif()
   endif()
 
+  if(NOT WIN32)
+    if(NOT TARGET Iconv::Iconv)
+      find_package(Iconv REQUIRED)
+    endif()
+  endif()
+
 endfunction()
