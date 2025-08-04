@@ -232,7 +232,7 @@ static OutputType posix_generic_convert(const InputType& input,
     size_t in_bytes_left;
     char* in_buf;
     
-    if constexpr (std::is_same_v<InputType, std::string>) {
+    if constexpr (std::is_same<InputType, std::string>::value) {
         in_bytes_left = input.length();
         in_buf = const_cast<char*>(input.c_str());
     } else { // std::wstring
@@ -242,7 +242,7 @@ static OutputType posix_generic_convert(const InputType& input,
     
     // 准备输出缓冲区
     size_t out_buf_size;
-    if constexpr (std::is_same_v<OutputType, std::string>) {
+    if constexpr (std::is_same<OutputType, std::string>::value) {
         out_buf_size = input.length() * 4; // 足够大的缓冲区
     } else { // std::wstring
         out_buf_size = input.length() * sizeof(wchar_t) * 2; // 足够大的缓冲区
@@ -267,7 +267,7 @@ static OutputType posix_generic_convert(const InputType& input,
     // 构造输出
     size_t converted_bytes = out_buf_size - out_bytes_left;
     
-    if constexpr (std::is_same_v<OutputType, std::string>) {
+    if constexpr (std::is_same<OutputType, std::string>::value) {
         return std::string(temp_output.data(), converted_bytes);
     } else { // std::wstring
         size_t wchar_count = converted_bytes / sizeof(wchar_t);
