@@ -141,4 +141,100 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         // 测试英文字符串
         REQUIRE(StringConverter::ansi_to_utf8("Testing ANSI UTF8 Conversion") == "Testing ANSI UTF8 Conversion");
     }
+    
+    SECTION("gb2312_to_wstring") {
+        // 测试空字符串
+        REQUIRE(StringConverter::gb2312_to_wstring("") == L"");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::gb2312_to_wstring("Hello") == L"Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::gb2312_to_wstring("12345") == L"12345");
+        
+        // 测试特殊字符
+        std::string gb2312_special = "Hello! @#$%^&*()";
+        std::wstring wide_special = StringConverter::gb2312_to_wstring(gb2312_special);
+        REQUIRE(wide_special == L"Hello! @#$%^&*()");
+    }
+    
+    SECTION("wstring_to_gb2312") {
+        // 测试空字符串
+        REQUIRE(StringConverter::wstring_to_gb2312(L"") == "");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::wstring_to_gb2312(L"Hello") == "Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::wstring_to_gb2312(L"12345") == "12345");
+        
+        // 测试特殊字符
+        std::wstring wide_special = L"Hello! @#$%^&*()";
+        std::string gb2312_special = StringConverter::wstring_to_gb2312(wide_special);
+        REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+    }
+    
+    SECTION("gb2312_to_utf8") {
+        // 测试空字符串
+        REQUIRE(StringConverter::gb2312_to_utf8("") == "");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::gb2312_to_utf8("Hello") == "Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::gb2312_to_utf8("12345") == "12345");
+        
+        // 测试特殊字符
+        std::string gb2312_special = "Hello! @#$%^&*()";
+        std::string utf8_special = StringConverter::gb2312_to_utf8(gb2312_special);
+        REQUIRE(utf8_special == "Hello! @#$%^&*()");
+    }
+    
+    SECTION("utf8_to_gb2312") {
+        // 测试空字符串
+        REQUIRE(StringConverter::utf8_to_gb2312("") == "");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::utf8_to_gb2312("Hello") == "Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::utf8_to_gb2312("12345") == "12345");
+        
+        // 测试特殊字符
+        std::string utf8_special = "Hello! @#$%^&*()";
+        std::string gb2312_special = StringConverter::utf8_to_gb2312(utf8_special);
+        REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+    }
+    
+    SECTION("gb2312_to_ansi") {
+        // 测试空字符串
+        REQUIRE(StringConverter::gb2312_to_ansi("") == "");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::gb2312_to_ansi("Hello") == "Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::gb2312_to_ansi("12345") == "12345");
+        
+        // 测试特殊字符
+        std::string gb2312_special = "Hello! @#$%^&*()";
+        std::string ansi_special = StringConverter::gb2312_to_ansi(gb2312_special);
+        REQUIRE(ansi_special == "Hello! @#$%^&*()");
+    }
+    
+    SECTION("ansi_to_gb2312") {
+        // 测试空字符串
+        REQUIRE(StringConverter::ansi_to_gb2312("") == "");
+        
+        // 测试ASCII字符串
+        REQUIRE(StringConverter::ansi_to_gb2312("Hello") == "Hello");
+        
+        // 测试数字
+        REQUIRE(StringConverter::ansi_to_gb2312("12345") == "12345");
+        
+        // 测试特殊字符
+        std::string ansi_special = "Hello! @#$%^&*()";
+        std::string gb2312_special = StringConverter::ansi_to_gb2312(ansi_special);
+        REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+    }
 }

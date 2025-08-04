@@ -34,6 +34,14 @@ static auto safe_convert(const T& input, Func converter) -> decltype(converter(i
     static std::string windows_wstring_to_ansi(const std::wstring& wide_str);
     static std::string windows_utf8_to_ansi(const std::string& utf8_str);
     static std::string windows_ansi_to_utf8(const std::string& ansi_str);
+    
+    // GB2312 相关函数
+    static std::wstring windows_gb2312_to_wstring(const std::string& gb2312_str);
+    static std::string windows_wstring_to_gb2312(const std::wstring& wide_str);
+    static std::string windows_gb2312_to_utf8(const std::string& gb2312_str);
+    static std::string windows_utf8_to_gb2312(const std::string& utf8_str);
+    static std::string windows_gb2312_to_ansi(const std::string& gb2312_str);
+    static std::string windows_ansi_to_gb2312(const std::string& ansi_str);
 #else
     // 非 Windows 平台辅助函数
     static std::wstring posix_utf8_to_wstring(const std::string& utf8_str);
@@ -42,6 +50,14 @@ static auto safe_convert(const T& input, Func converter) -> decltype(converter(i
     static std::string posix_wstring_to_ansi(const std::wstring& wide_str);
     static std::string posix_utf8_to_ansi(const std::string& utf8_str);
     static std::string posix_ansi_to_utf8(const std::string& ansi_str);
+    
+    // GB2312 相关函数
+    static std::wstring posix_gb2312_to_wstring(const std::string& gb2312_str);
+    static std::string posix_wstring_to_gb2312(const std::wstring& wide_str);
+    static std::string posix_gb2312_to_utf8(const std::string& gb2312_str);
+    static std::string posix_utf8_to_gb2312(const std::string& utf8_str);
+    static std::string posix_gb2312_to_ansi(const std::string& gb2312_str);
+    static std::string posix_ansi_to_gb2312(const std::string& ansi_str);
 
     // 通用的 iconv 转换函数
     template<typename InputType, typename OutputType>
@@ -97,6 +113,54 @@ std::string StringConverter::ansi_to_utf8(const std::string& ansi_str) {
     return safe_convert(ansi_str, windows_ansi_to_utf8);
 #else
     return safe_convert(ansi_str, posix_ansi_to_utf8);
+#endif
+}
+
+std::wstring StringConverter::gb2312_to_wstring(const std::string& gb2312_str) {
+#ifdef _WIN32
+    return safe_convert(gb2312_str, windows_gb2312_to_wstring);
+#else
+    return safe_convert(gb2312_str, posix_gb2312_to_wstring);
+#endif
+}
+
+std::string StringConverter::wstring_to_gb2312(const std::wstring& wide_str) {
+#ifdef _WIN32
+    return safe_convert(wide_str, windows_wstring_to_gb2312);
+#else
+    return safe_convert(wide_str, posix_wstring_to_gb2312);
+#endif
+}
+
+std::string StringConverter::gb2312_to_utf8(const std::string& gb2312_str) {
+#ifdef _WIN32
+    return safe_convert(gb2312_str, windows_gb2312_to_utf8);
+#else
+    return safe_convert(gb2312_str, posix_gb2312_to_utf8);
+#endif
+}
+
+std::string StringConverter::utf8_to_gb2312(const std::string& utf8_str) {
+#ifdef _WIN32
+    return safe_convert(utf8_str, windows_utf8_to_gb2312);
+#else
+    return safe_convert(utf8_str, posix_utf8_to_gb2312);
+#endif
+}
+
+std::string StringConverter::gb2312_to_ansi(const std::string& gb2312_str) {
+#ifdef _WIN32
+    return safe_convert(gb2312_str, windows_gb2312_to_ansi);
+#else
+    return safe_convert(gb2312_str, posix_gb2312_to_ansi);
+#endif
+}
+
+std::string StringConverter::ansi_to_gb2312(const std::string& ansi_str) {
+#ifdef _WIN32
+    return safe_convert(ansi_str, windows_ansi_to_gb2312);
+#else
+    return safe_convert(ansi_str, posix_ansi_to_gb2312);
 #endif
 }
 
@@ -178,6 +242,39 @@ static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
     return windows_wstring_to_utf8(wide_str);
 }
 
+// GB2312 相关实现
+static std::wstring windows_gb2312_to_wstring(const std::string& gb2312_str) {
+    return windows_mb_to_wstring(gb2312_str, 936, "GB2312 to Unicode");
+}
+
+static std::string windows_wstring_to_gb2312(const std::wstring& wide_str) {
+    return windows_wstring_to_mb(wide_str, 936, "Unicode to GB2312");
+}
+
+static std::string windows_gb2312_to_utf8(const std::string& gb2312_str) {
+    // GB2312 -> Unicode -> UTF-8
+    std::wstring wide_str = windows_gb2312_to_wstring(gb2312_str);
+    return windows_wstring_to_utf8(wide_str);
+}
+
+static std::string windows_utf8_to_gb2312(const std::string& utf8_str) {
+    // UTF-8 -> Unicode -> GB2312
+    std::wstring wide_str = windows_utf8_to_wstring(utf8_str);
+    return windows_wstring_to_gb2312(wide_str);
+}
+
+static std::string windows_gb2312_to_ansi(const std::string& gb2312_str) {
+    // GB2312 -> Unicode -> ANSI
+    std::wstring wide_str = windows_gb2312_to_wstring(gb2312_str);
+    return windows_wstring_to_ansi(wide_str);
+}
+
+static std::string windows_ansi_to_gb2312(const std::string& ansi_str) {
+    // ANSI -> Unicode -> GB2312
+    std::wstring wide_str = windows_ansi_to_wstring(ansi_str);
+    return windows_wstring_to_gb2312(wide_str);
+}
+
 #else // 非 Windows 平台
 
 static std::wstring posix_utf8_to_wstring(const std::string& utf8_str) {
@@ -206,6 +303,33 @@ static std::string posix_utf8_to_ansi(const std::string& utf8_str) {
 static std::string posix_ansi_to_utf8(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
     return posix_generic_convert<std::string, std::string>(ansi_str, system_encoding.c_str(), "UTF-8");
+}
+
+// GB2312 相关实现
+static std::wstring posix_gb2312_to_wstring(const std::string& gb2312_str) {
+    return posix_generic_convert<std::string, std::wstring>(gb2312_str, "GB2312", get_wchar_encoding());
+}
+
+static std::string posix_wstring_to_gb2312(const std::wstring& wide_str) {
+    return posix_generic_convert<std::wstring, std::string>(wide_str, get_wchar_encoding(), "GB2312");
+}
+
+static std::string posix_gb2312_to_utf8(const std::string& gb2312_str) {
+    return posix_generic_convert<std::string, std::string>(gb2312_str, "GB2312", "UTF-8");
+}
+
+static std::string posix_utf8_to_gb2312(const std::string& utf8_str) {
+    return posix_generic_convert<std::string, std::string>(utf8_str, "UTF-8", "GB2312");
+}
+
+static std::string posix_gb2312_to_ansi(const std::string& gb2312_str) {
+    std::string system_encoding = get_system_encoding();
+    return posix_generic_convert<std::string, std::string>(gb2312_str, "GB2312", system_encoding.c_str());
+}
+
+static std::string posix_ansi_to_gb2312(const std::string& ansi_str) {
+    std::string system_encoding = get_system_encoding();
+    return posix_generic_convert<std::string, std::string>(ansi_str, system_encoding.c_str(), "GB2312");
 }
 
 template<typename InputType, typename OutputType>
