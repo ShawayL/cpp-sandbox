@@ -176,38 +176,22 @@ static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
 
 #else // 非 Windows 平台
 
-// POSIX 平台安全转换包装器
-template<typename Converter>
-static auto posix_safe_convert(Converter converter, const char* operation) {
-    return [converter, operation](const auto& input) {
-        try {
-            return converter(input);
-        } catch (const std::range_error& e) {
-            throw std::runtime_error(std::string("Failed to ") + operation + ": " + e.what());
-        }
-    };
-}
-
 static std::wstring posix_utf8_to_wstring(const std::string& utf8_str) {
-    auto converter = posix_safe_convert(
-        [](const std::string& str) {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-            return conv.from_bytes(str);
-        }, 
-        "convert UTF-8 to wide string"
-    );
-    return converter(utf8_str);
+    try {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.from_bytes(utf8_str);
+    } catch (const std::range_error& e) {
+        throw std::runtime_error(std::string("Failed to convert UTF-8 to wide string: ") + e.what());
+    }
 }
 
 static std::string posix_wstring_to_utf8(const std::wstring& wide_str) {
-    auto converter = posix_safe_convert(
-        [](const std::wstring& str) {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-            return conv.to_bytes(str);
-        }, 
-        "convert wide string to UTF-8"
-    );
-    return converter(wide_str);
+    try {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.to_bytes(wide_str);
+    } catch (const std::range_error& e) {
+        throw std::runtime_error(std::string("Failed to convert wide string to UTF-8: ") + e.what());
+    }
 }
 
 static std::wstring posix_ansi_to_wstring(const std::string& ansi_str) {
