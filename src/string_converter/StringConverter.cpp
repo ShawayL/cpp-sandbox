@@ -41,13 +41,13 @@ static auto safe_convert(const T& input, Func converter) -> decltype(converter(i
     static std::string posix_wstring_to_ansi(const std::wstring& wide_str);
     static std::string posix_utf8_to_ansi(const std::string& utf8_str);
     static std::string posix_ansi_to_utf8(const std::string& ansi_str);
-    static std::wstring posix_convert_to_wstring(const std::string& input,
-                                            const char* from_encoding);
-    static std::string posix_convert_from_wstring(const std::wstring& input,
-                                            const char* to_encoding);
-    static std::string posix_convert_encoding(const std::string& input, 
-                                            const char* from_encoding, 
-                                            const char* to_encoding);
+
+    // 通用的 iconv 转换函数
+    template<typename InputType, typename OutputType>
+    static OutputType posix_generic_convert(const InputType& input,
+                                          const char* from_encoding,
+                                          const char* to_encoding);
+
     static std::string get_system_encoding();
 #endif
 
@@ -180,126 +180,46 @@ static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
 #else // 非 Windows 平台
 
 static std::wstring posix_utf8_to_wstring(const std::string& utf8_str) {
-    return posix_convert_to_wstring(utf8_str, "UTF-8");
+    return posix_generic_convert<std::string, std::wstring>(utf8_str, "UTF-8", "WCHAR_T");
 }
 
 static std::string posix_wstring_to_utf8(const std::wstring& wide_str) {
-    return posix_convert_from_wstring(wide_str, "UTF-8");
+    return posix_generic_convert<std::wstring, std::string>(wide_str, "WCHAR_T", "UTF-8");
 }
 
 static std::wstring posix_ansi_to_wstring(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_convert_to_wstring(ansi_str, system_encoding.c_str());
+    return posix_generic_convert<std::string, std::wstring>(ansi_str, system_encoding.c_str(), "WCHAR_T");
 }
 
 static std::string posix_wstring_to_ansi(const std::wstring& wide_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_convert_from_wstring(wide_str, system_encoding.c_str());
+    return posix_generic_convert<std::wstring, std::string>(wide_str, "WCHAR_T", system_encoding.c_str());
 }
 
 static std::string posix_utf8_to_ansi(const std::string& utf8_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_convert_encoding(utf8_str, "UTF-8", system_encoding.c_str());
+    return posix_generic_convert<std::string, std::string>(utf8_str, "UTF-8", system_encoding.c_str());
 }
 
 static std::string posix_ansi_to_utf8(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_convert_encoding(ansi_str, system_encoding.c_str(), "UTF-8");
+    return posix_generic_convert<std::string, std::string>(ansi_str, system_encoding.c_str(), "UTF-8");
 }
 
-static std::wstring posix_convert_to_wstring(const std::string& input, const char* from_encoding) {
+template<typename InputType, typename OutputType>
+static OutputType posix_generic_convert(const InputType& input,
+                                       const char* from_encoding,
+                                       const char* to_encoding) {
     if (input.empty()) {
-        return std::wstring();
+        return OutputType();
     }
     
-    iconv_t cd = iconv_open("WCHAR_T", from_encoding);
-    if (cd == (iconv_t)-1) {
-        throw std::runtime_error("Failed to open iconv from " + std::string(from_encoding) + 
-                                " to WCHAR_T: " + std::string(strerror(errno)));
-    }
-    
-    // 输入缓冲区
-    size_t in_bytes_left = input.length();
-    char* in_buf = const_cast<char*>(input.c_str());
-    
-    // 输出缓冲区（为宽字符分配空间）
-    size_t out_bytes_left = input.length() * sizeof(wchar_t) * 2; // 足够大的缓冲区
-    size_t out_buf_size = out_bytes_left;
-    std::vector<char> temp_output(out_buf_size);
-    char* out_buf = temp_output.data();
-    
-    // 执行转换
-    size_t result = iconv(cd, &in_buf, &in_bytes_left, &out_buf, &out_bytes_left);
-    
-    if (result == (size_t)-1) {
-        int error_code = errno;
-        iconv_close(cd);
-        throw std::runtime_error("Failed to convert from " + std::string(from_encoding) + 
-                                " to WCHAR_T: " + std::string(strerror(error_code)));
-    }
-    
-    iconv_close(cd);
-    
-    // 计算转换后的宽字符数量
-    size_t converted_bytes = out_buf_size - out_bytes_left;
-    size_t wchar_count = converted_bytes / sizeof(wchar_t);
-    
-    // 构造wstring
-    std::wstring output(reinterpret_cast<wchar_t*>(temp_output.data()), wchar_count);
-    
-    return output;
-}
-
-static std::string posix_convert_from_wstring(const std::wstring& input, const char* to_encoding) {
-    if (input.empty()) {
-        return std::string();
-    }
-    
-    iconv_t cd = iconv_open(to_encoding, "WCHAR_T");
-    if (cd == (iconv_t)-1) {
-        throw std::runtime_error("Failed to open iconv from WCHAR_T to " + std::string(to_encoding) + 
-                                ": " + std::string(strerror(errno)));
-    }
-    
-    // 输入缓冲区
-    size_t in_bytes_left = input.length() * sizeof(wchar_t);
-    char* in_buf = reinterpret_cast<char*>(const_cast<wchar_t*>(input.c_str()));
-    
-    // 输出缓冲区
-    size_t out_bytes_left = input.length() * 4; // 足够大的缓冲区
-    size_t out_buf_size = out_bytes_left;
-    std::string output(out_buf_size, '\0');
-    char* out_buf = &output[0];
-    
-    // 执行转换
-    size_t result = iconv(cd, &in_buf, &in_bytes_left, &out_buf, &out_bytes_left);
-    
-    if (result == (size_t)-1) {
-        int error_code = errno;
-        iconv_close(cd);
-        throw std::runtime_error("Failed to convert from WCHAR_T to " + std::string(to_encoding) + 
-                                ": " + std::string(strerror(error_code)));
-    }
-    
-    iconv_close(cd);
-    
-    // 调整输出字符串大小
-    size_t converted_bytes = out_buf_size - out_bytes_left;
-    output.resize(converted_bytes);
-    
-    return output;
-}
-
-static std::string posix_convert_encoding(const std::string& input, 
-                                         const char* from_encoding, 
-                                         const char* to_encoding) {
-    if (input.empty()) {
-        return std::string();
-    }
-    
-    // 如果源编码和目标编码相同，直接返回
-    if (strcmp(from_encoding, to_encoding) == 0) {
-        return input;
+    // 如果源编码和目标编码相同，且类型相同，直接返回
+    if (std::is_same_v<InputType, OutputType> && strcmp(from_encoding, to_encoding) == 0) {
+        if constexpr (std::is_same_v<InputType, OutputType>) {
+            return input;
+        }
     }
     
     iconv_t cd = iconv_open(to_encoding, from_encoding);
@@ -308,15 +228,29 @@ static std::string posix_convert_encoding(const std::string& input,
                                 " to " + std::string(to_encoding) + ": " + std::string(strerror(errno)));
     }
     
-    // 输入缓冲区
-    size_t in_bytes_left = input.length();
-    char* in_buf = const_cast<char*>(input.c_str());
+    // 准备输入缓冲区
+    size_t in_bytes_left;
+    char* in_buf;
     
-    // 输出缓冲区（预分配足够的空间）
-    size_t out_bytes_left = input.length() * 4; // 足够大的缓冲区
-    size_t out_buf_size = out_bytes_left;
-    std::string output(out_buf_size, '\0');
-    char* out_buf = &output[0];
+    if constexpr (std::is_same_v<InputType, std::string>) {
+        in_bytes_left = input.length();
+        in_buf = const_cast<char*>(input.c_str());
+    } else { // std::wstring
+        in_bytes_left = input.length() * sizeof(wchar_t);
+        in_buf = reinterpret_cast<char*>(const_cast<wchar_t*>(input.c_str()));
+    }
+    
+    // 准备输出缓冲区
+    size_t out_buf_size;
+    if constexpr (std::is_same_v<OutputType, std::string>) {
+        out_buf_size = input.length() * 4; // 足够大的缓冲区
+    } else { // std::wstring
+        out_buf_size = input.length() * sizeof(wchar_t) * 2; // 足够大的缓冲区
+    }
+    
+    size_t out_bytes_left = out_buf_size;
+    std::vector<char> temp_output(out_buf_size);
+    char* out_buf = temp_output.data();
     
     // 执行转换
     size_t result = iconv(cd, &in_buf, &in_bytes_left, &out_buf, &out_bytes_left);
@@ -330,11 +264,15 @@ static std::string posix_convert_encoding(const std::string& input,
     
     iconv_close(cd);
     
-    // 调整输出字符串大小
+    // 构造输出
     size_t converted_bytes = out_buf_size - out_bytes_left;
-    output.resize(converted_bytes);
     
-    return output;
+    if constexpr (std::is_same_v<OutputType, std::string>) {
+        return std::string(temp_output.data(), converted_bytes);
+    } else { // std::wstring
+        size_t wchar_count = converted_bytes / sizeof(wchar_t);
+        return std::wstring(reinterpret_cast<wchar_t*>(temp_output.data()), wchar_count);
+    }
 }
 
 static std::string get_system_encoding() {
