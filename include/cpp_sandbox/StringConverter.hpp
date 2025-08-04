@@ -101,6 +101,12 @@ public:
      * @throws std::runtime_error 转换失败时抛出异常
      */
     static std::string ansi_to_gb2312(const std::string& ansi_str);
+    
+    /**
+     * 获取当前系统的 ANSI 代码页
+     * @return 当前 ANSI 代码页编号，在非 Windows 系统上返回 0
+     */
+    static unsigned int get_ansi_codepage();
 };
 
 #endif // STRING_CONVERTER_H

@@ -481,3 +481,12 @@ static std::string get_system_encoding() {
 }
 
 #endif
+
+// 获取当前系统的 ANSI 代码页
+unsigned int StringConverter::get_ansi_codepage() {
+#ifdef _WIN32
+    return GetACP();
+#else
+    return 0; // 非 Windows 系统返回 0
+#endif
+}

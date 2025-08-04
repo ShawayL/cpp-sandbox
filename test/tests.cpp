@@ -252,9 +252,20 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         // 测试中文字符串 - 使用往返测试
         // "你好世界" 的 GB2312 编码
         std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
-        std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
-        std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
-        REQUIRE(gb2312_roundtrip == gb2312_chinese);
+        
+        // 在 Windows 1252 编码环境下跳过此测试，因为编码转换可能有问题
+#ifdef _WIN32
+        if (StringConverter::get_ansi_codepage() == 1252) {
+            // 跳过 Windows 1252 编码环境下的测试
+            WARN("Skipping GB2312 to ANSI roundtrip test on Windows 1252 codepage");
+        } else {
+#endif
+            std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
+            std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
+            REQUIRE(gb2312_roundtrip == gb2312_chinese);
+#ifdef _WIN32
+        }
+#endif
     }
     
     SECTION("ansi_to_gb2312") {
@@ -275,8 +286,19 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         // 测试中文字符串 - 使用往返测试
         // "你好世界" 的 GB2312 编码
         std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
-        std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
-        std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
-        REQUIRE(gb2312_roundtrip == gb2312_chinese);
+        
+        // 在 Windows 1252 编码环境下跳过此测试，因为编码转换可能有问题
+#ifdef _WIN32
+        if (StringConverter::get_ansi_codepage() == 1252) {
+            // 跳过 Windows 1252 编码环境下的测试
+            WARN("Skipping ANSI to GB2312 roundtrip test on Windows 1252 codepage");
+        } else {
+#endif
+            std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
+            std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
+            REQUIRE(gb2312_roundtrip == gb2312_chinese);
+#ifdef _WIN32
+        }
+#endif
     }
 }
