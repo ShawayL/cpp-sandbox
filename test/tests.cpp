@@ -156,6 +156,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string gb2312_special = "Hello! @#$%^&*()";
         std::wstring wide_special = StringConverter::gb2312_to_wstring(gb2312_special);
         REQUIRE(wide_special == L"Hello! @#$%^&*()");
+        
+        // 测试中文字符串
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        // "你好世界" 的 Unicode 码点
+        std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
+        REQUIRE(StringConverter::gb2312_to_wstring(gb2312_chinese) == wide_chinese);
     }
     
     SECTION("wstring_to_gb2312") {
@@ -172,6 +179,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::wstring wide_special = L"Hello! @#$%^&*()";
         std::string gb2312_special = StringConverter::wstring_to_gb2312(wide_special);
         REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+        
+        // 测试中文字符串
+        // "你好世界" 的 Unicode 码点
+        std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        REQUIRE(StringConverter::wstring_to_gb2312(wide_chinese) == gb2312_chinese);
     }
     
     SECTION("gb2312_to_utf8") {
@@ -188,6 +202,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string gb2312_special = "Hello! @#$%^&*()";
         std::string utf8_special = StringConverter::gb2312_to_utf8(gb2312_special);
         REQUIRE(utf8_special == "Hello! @#$%^&*()");
+        
+        // 测试中文字符串
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        // "你好世界" 的 UTF-8 编码
+        std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
+        REQUIRE(StringConverter::gb2312_to_utf8(gb2312_chinese) == utf8_chinese);
     }
     
     SECTION("utf8_to_gb2312") {
@@ -204,6 +225,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string utf8_special = "Hello! @#$%^&*()";
         std::string gb2312_special = StringConverter::utf8_to_gb2312(utf8_special);
         REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+        
+        // 测试中文字符串
+        // "你好世界" 的 UTF-8 编码
+        std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        REQUIRE(StringConverter::utf8_to_gb2312(utf8_chinese) == gb2312_chinese);
     }
     
     SECTION("gb2312_to_ansi") {
@@ -220,6 +248,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string gb2312_special = "Hello! @#$%^&*()";
         std::string ansi_special = StringConverter::gb2312_to_ansi(gb2312_special);
         REQUIRE(ansi_special == "Hello! @#$%^&*()");
+        
+        // 测试中文字符串 - 使用往返测试
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
+        std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
+        REQUIRE(gb2312_roundtrip == gb2312_chinese);
     }
     
     SECTION("ansi_to_gb2312") {
@@ -236,5 +271,12 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string ansi_special = "Hello! @#$%^&*()";
         std::string gb2312_special = StringConverter::ansi_to_gb2312(ansi_special);
         REQUIRE(gb2312_special == "Hello! @#$%^&*()");
+        
+        // 测试中文字符串 - 使用往返测试
+        // "你好世界" 的 GB2312 编码
+        std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
+        std::string ansi_chinese = StringConverter::gb2312_to_ansi(gb2312_chinese);
+        std::string gb2312_roundtrip = StringConverter::ansi_to_gb2312(ansi_chinese);
+        REQUIRE(gb2312_roundtrip == gb2312_chinese);
     }
 }
