@@ -1,6 +1,7 @@
 #include <cpp_sandbox/StringConverter.hpp>
 #include <stdexcept>
 #include <vector>
+#include <cstdint>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -179,22 +180,64 @@ static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
 
 #else // 非 Windows 平台
 
+// 获取系统的wchar_t编码名称
+static const char* get_wchar_encoding() {
+    static const char* wchar_encoding = nullptr;
+    if (wchar_encoding == nullptr) {
+        // 确定字节序
+        union {
+            uint32_t i;
+            char c[4];
+        } test = { 0x01020304 };
+        
+        bool is_big_endian = (test.c[0] == 0x01);
+        
+        // 根据wchar_t的大小和字节序确定编码
+        if (sizeof(wchar_t) == 4) {
+            wchar_encoding = is_big_endian ? "UTF-32BE" : "UTF-32LE";
+        } else if (sizeof(wchar_t) == 2) {
+            wchar_encoding = is_big_endian ? "UTF-16BE" : "UTF-16LE";
+        } else {
+            // 后备选项，尝试常见的编码名称
+            static const char* candidates[] = {
+                "WCHAR_T", "UCS-4", "UTF-32", "UCS-2", "UTF-16", nullptr
+            };
+            
+            // 测试哪个编码名称可用
+            for (int i = 0; candidates[i] != nullptr; ++i) {
+                iconv_t cd = iconv_open("UTF-8", candidates[i]);
+                if (cd != (iconv_t)-1) {
+                    iconv_close(cd);
+                    wchar_encoding = candidates[i];
+                    break;
+                }
+            }
+            
+            // 如果都不行，使用UTF-32LE作为默认值
+            if (wchar_encoding == nullptr) {
+                wchar_encoding = is_big_endian ? "UTF-32BE" : "UTF-32LE";
+            }
+        }
+    }
+    return wchar_encoding;
+}
+
 static std::wstring posix_utf8_to_wstring(const std::string& utf8_str) {
-    return posix_generic_convert<std::string, std::wstring>(utf8_str, "UTF-8", "WCHAR_T");
+    return posix_generic_convert<std::string, std::wstring>(utf8_str, "UTF-8", get_wchar_encoding());
 }
 
 static std::string posix_wstring_to_utf8(const std::wstring& wide_str) {
-    return posix_generic_convert<std::wstring, std::string>(wide_str, "WCHAR_T", "UTF-8");
+    return posix_generic_convert<std::wstring, std::string>(wide_str, get_wchar_encoding(), "UTF-8");
 }
 
 static std::wstring posix_ansi_to_wstring(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_generic_convert<std::string, std::wstring>(ansi_str, system_encoding.c_str(), "WCHAR_T");
+    return posix_generic_convert<std::string, std::wstring>(ansi_str, system_encoding.c_str(), get_wchar_encoding());
 }
 
 static std::string posix_wstring_to_ansi(const std::wstring& wide_str) {
     std::string system_encoding = get_system_encoding();
-    return posix_generic_convert<std::wstring, std::string>(wide_str, "WCHAR_T", system_encoding.c_str());
+    return posix_generic_convert<std::wstring, std::string>(wide_str, get_wchar_encoding(), system_encoding.c_str());
 }
 
 static std::string posix_utf8_to_ansi(const std::string& utf8_str) {
