@@ -32,4 +32,6 @@ target_compile_features(string_converter PUBLIC cxx_std_11)
 set_target_properties(string_converter
   PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} CXX_VISIBILITY_PRESET hidden)
 
-target_link_libraries(string_converter PRIVATE Iconv::Iconv)
+if(NOT WIN32)
+  target_link_libraries(string_converter PRIVATE Iconv::Iconv)
+endif()
