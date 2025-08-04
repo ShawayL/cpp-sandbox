@@ -11,23 +11,35 @@
     #include <cstring>
 #endif
 
-// 私有辅助函数声明
+// 通用模板函数用于检查空字符串
+template<typename T, typename Func>
+static auto safe_convert(const T& input, Func converter) -> decltype(converter(input)) {
+    if (input.empty()) {
+        return decltype(converter(input))();
+    }
+    return converter(input);
+}
+
 #ifdef _WIN32
+    // Windows 平台统一转换函数
+    static std::wstring windows_mb_to_wstring(const std::string& input, UINT codepage, const char* operation);
+    static std::string windows_wstring_to_mb(const std::wstring& input, UINT codepage, const char* operation);
+    
     // Windows 平台辅助函数
     static std::wstring windows_utf8_to_wstring(const std::string& utf8_str);
     static std::string windows_wstring_to_utf8(const std::wstring& wide_str);
     static std::wstring windows_ansi_to_wstring(const std::string& ansi_str);
     static std::string windows_wstring_to_ansi(const std::wstring& wide_str);
-    static std::string windows_utf8_to_ansi_direct(const std::string& utf8_str);
-    static std::string windows_ansi_to_utf8_direct(const std::string& ansi_str);
+    static std::string windows_utf8_to_ansi(const std::string& utf8_str);
+    static std::string windows_ansi_to_utf8(const std::string& ansi_str);
 #else
     // 非 Windows 平台辅助函数
     static std::wstring posix_utf8_to_wstring(const std::string& utf8_str);
     static std::string posix_wstring_to_utf8(const std::wstring& wide_str);
     static std::wstring posix_ansi_to_wstring(const std::string& ansi_str);
     static std::string posix_wstring_to_ansi(const std::wstring& wide_str);
-    static std::string posix_utf8_to_ansi_direct(const std::string& utf8_str);
-    static std::string posix_ansi_to_utf8_direct(const std::string& ansi_str);
+    static std::string posix_utf8_to_ansi(const std::string& utf8_str);
+    static std::string posix_ansi_to_utf8(const std::string& ansi_str);
     static std::string posix_convert_encoding(const std::string& input, 
                                             const char* from_encoding, 
                                             const char* to_encoding);
@@ -35,306 +47,189 @@
 #endif
 
 std::wstring StringConverter::utf8_to_wstring(const std::string& utf8_str) {
-    if (utf8_str.empty()) {
-        return std::wstring();
-    }
-    
 #ifdef _WIN32
-    return ::windows_utf8_to_wstring(utf8_str);
+    return safe_convert(utf8_str, windows_utf8_to_wstring);
 #else
-    return ::posix_utf8_to_wstring(utf8_str);
+    return safe_convert(utf8_str, posix_utf8_to_wstring);
 #endif
 }
 
 std::string StringConverter::wstring_to_utf8(const std::wstring& wide_str) {
-    if (wide_str.empty()) {
-        return std::string();
-    }
-    
 #ifdef _WIN32
-    return ::windows_wstring_to_utf8(wide_str);
+    return safe_convert(wide_str, windows_wstring_to_utf8);
 #else
-    return ::posix_wstring_to_utf8(wide_str);
+    return safe_convert(wide_str, posix_wstring_to_utf8);
 #endif
 }
 
 std::wstring StringConverter::ansi_to_wstring(const std::string& ansi_str) {
-    if (ansi_str.empty()) {
-        return std::wstring();
-    }
-    
 #ifdef _WIN32
-    return ::windows_ansi_to_wstring(ansi_str);
+    return safe_convert(ansi_str, windows_ansi_to_wstring);
 #else
-    return ::posix_ansi_to_wstring(ansi_str);
+    return safe_convert(ansi_str, posix_ansi_to_wstring);
 #endif
 }
 
 std::string StringConverter::wstring_to_ansi(const std::wstring& wide_str) {
-    if (wide_str.empty()) {
-        return std::string();
-    }
-    
 #ifdef _WIN32
-    return ::windows_wstring_to_ansi(wide_str);
+    return safe_convert(wide_str, windows_wstring_to_ansi);
 #else
-    return ::posix_wstring_to_ansi(wide_str);
+    return safe_convert(wide_str, posix_wstring_to_ansi);
 #endif
 }
 
 std::string StringConverter::utf8_to_ansi(const std::string& utf8_str) {
-    if (utf8_str.empty()) {
-        return std::string();
-    }
-    
 #ifdef _WIN32
-    return ::windows_utf8_to_ansi_direct(utf8_str);
+    return safe_convert(utf8_str, windows_utf8_to_ansi);
 #else
-    return ::posix_utf8_to_ansi_direct(utf8_str);
+    return safe_convert(utf8_str, posix_utf8_to_ansi);
 #endif
 }
 
 std::string StringConverter::ansi_to_utf8(const std::string& ansi_str) {
-    if (ansi_str.empty()) {
-        return std::string();
-    }
-    
 #ifdef _WIN32
-    return ::windows_ansi_to_utf8_direct(ansi_str);
+    return safe_convert(ansi_str, windows_ansi_to_utf8);
 #else
-    return ::posix_ansi_to_utf8_direct(ansi_str);
+    return safe_convert(ansi_str, posix_ansi_to_utf8);
 #endif
 }
 
 #ifdef _WIN32
 
-static std::wstring windows_utf8_to_wstring(const std::string& utf8_str) {
+// Windows 平台统一多字节转宽字符函数
+static std::wstring windows_mb_to_wstring(const std::string& input, UINT codepage, const char* operation) {
     int wide_length = MultiByteToWideChar(
-        CP_UTF8, 0, utf8_str.c_str(), 
-        static_cast<int>(utf8_str.length()), nullptr, 0
+        codepage, 0, input.c_str(), 
+        static_cast<int>(input.length()), nullptr, 0
     );
     
     if (wide_length <= 0) {
-        throw std::runtime_error("Failed to convert UTF-8 to wide string: MultiByteToWideChar failed");
+        throw std::runtime_error(std::string("Failed to convert to wide string (") + operation + "): MultiByteToWideChar failed");
     }
     
     std::wstring wide_str(wide_length, L'\0');
     int result = MultiByteToWideChar(
-        CP_UTF8, 0, utf8_str.c_str(), 
-        static_cast<int>(utf8_str.length()), &wide_str[0], wide_length
+        codepage, 0, input.c_str(), 
+        static_cast<int>(input.length()), &wide_str[0], wide_length
     );
     
     if (result <= 0) {
-        throw std::runtime_error("Failed to convert UTF-8 to wide string: conversion failed");
+        throw std::runtime_error(std::string("Failed to convert to wide string (") + operation + "): conversion failed");
     }
     
     return wide_str;
+}
+
+// Windows 平台统一宽字符转多字节函数
+static std::string windows_wstring_to_mb(const std::wstring& input, UINT codepage, const char* operation) {
+    int mb_length = WideCharToMultiByte(
+        codepage, 0, input.c_str(), 
+        static_cast<int>(input.length()), nullptr, 0, nullptr, nullptr
+    );
+    
+    if (mb_length <= 0) {
+        throw std::runtime_error(std::string("Failed to convert from wide string (") + operation + "): WideCharToMultiByte failed");
+    }
+    
+    std::string mb_str(mb_length, '\0');
+    int result = WideCharToMultiByte(
+        codepage, 0, input.c_str(), 
+        static_cast<int>(input.length()), &mb_str[0], mb_length, nullptr, nullptr
+    );
+    
+    if (result <= 0) {
+        throw std::runtime_error(std::string("Failed to convert from wide string (") + operation + "): conversion failed");
+    }
+    
+    return mb_str;
+}
+
+static std::wstring windows_utf8_to_wstring(const std::string& utf8_str) {
+    return windows_mb_to_wstring(utf8_str, CP_UTF8, "UTF-8 to Unicode");
 }
 
 static std::string windows_wstring_to_utf8(const std::wstring& wide_str) {
-    int utf8_length = WideCharToMultiByte(
-        CP_UTF8, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), nullptr, 0, nullptr, nullptr
-    );
-    
-    if (utf8_length <= 0) {
-        throw std::runtime_error("Failed to convert wide string to UTF-8: WideCharToMultiByte failed");
-    }
-    
-    std::string utf8_str(utf8_length, '\0');
-    int result = WideCharToMultiByte(
-        CP_UTF8, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), &utf8_str[0], utf8_length, nullptr, nullptr
-    );
-    
-    if (result <= 0) {
-        throw std::runtime_error("Failed to convert wide string to UTF-8: conversion failed");
-    }
-    
-    return utf8_str;
+    return windows_wstring_to_mb(wide_str, CP_UTF8, "Unicode to UTF-8");
 }
 
 static std::wstring windows_ansi_to_wstring(const std::string& ansi_str) {
-    int wide_length = MultiByteToWideChar(
-        CP_ACP, 0, ansi_str.c_str(), 
-        static_cast<int>(ansi_str.length()), nullptr, 0
-    );
-    
-    if (wide_length <= 0) {
-        throw std::runtime_error("Failed to convert ANSI to wide string: MultiByteToWideChar failed");
-    }
-    
-    std::wstring wide_str(wide_length, L'\0');
-    int result = MultiByteToWideChar(
-        CP_ACP, 0, ansi_str.c_str(), 
-        static_cast<int>(ansi_str.length()), &wide_str[0], wide_length
-    );
-    
-    if (result <= 0) {
-        throw std::runtime_error("Failed to convert ANSI to wide string: conversion failed");
-    }
-    
-    return wide_str;
+    return windows_mb_to_wstring(ansi_str, CP_ACP, "ANSI to Unicode");
 }
 
 static std::string windows_wstring_to_ansi(const std::wstring& wide_str) {
-    int ansi_length = WideCharToMultiByte(
-        CP_ACP, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), nullptr, 0, nullptr, nullptr
-    );
-    
-    if (ansi_length <= 0) {
-        throw std::runtime_error("Failed to convert wide string to ANSI: WideCharToMultiByte failed");
-    }
-    
-    std::string ansi_str(ansi_length, '\0');
-    int result = WideCharToMultiByte(
-        CP_ACP, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), &ansi_str[0], ansi_length, nullptr, nullptr
-    );
-    
-    if (result <= 0) {
-        throw std::runtime_error("Failed to convert wide string to ANSI: conversion failed");
-    }
-    
-    return ansi_str;
+    return windows_wstring_to_mb(wide_str, CP_ACP, "Unicode to ANSI");
 }
 
 // 直接转换：UTF-8 -> ANSI (Windows)
-static std::string windows_utf8_to_ansi_direct(const std::string& utf8_str) {
-    // 方法1：使用双重转换（更可靠）
+static std::string windows_utf8_to_ansi(const std::string& utf8_str) {
     // UTF-8 -> Unicode -> ANSI
-    
-    // 步骤1：UTF-8 -> Unicode
-    int wide_length = MultiByteToWideChar(
-        CP_UTF8, 0, utf8_str.c_str(), 
-        static_cast<int>(utf8_str.length()), nullptr, 0
-    );
-    
-    if (wide_length <= 0) {
-        throw std::runtime_error("Failed UTF-8 to ANSI: UTF-8 to Unicode conversion failed");
-    }
-    
-    std::wstring wide_str(wide_length, L'\0');
-    int result1 = MultiByteToWideChar(
-        CP_UTF8, 0, utf8_str.c_str(), 
-        static_cast<int>(utf8_str.length()), &wide_str[0], wide_length
-    );
-    
-    if (result1 <= 0) {
-        throw std::runtime_error("Failed UTF-8 to ANSI: UTF-8 to Unicode conversion failed");
-    }
-    
-    // 步骤2：Unicode -> ANSI
-    int ansi_length = WideCharToMultiByte(
-        CP_ACP, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), nullptr, 0, nullptr, nullptr
-    );
-    
-    if (ansi_length <= 0) {
-        throw std::runtime_error("Failed UTF-8 to ANSI: Unicode to ANSI conversion failed");
-    }
-    
-    std::string ansi_str(ansi_length, '\0');
-    int result2 = WideCharToMultiByte(
-        CP_ACP, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), &ansi_str[0], ansi_length, nullptr, nullptr
-    );
-    
-    if (result2 <= 0) {
-        throw std::runtime_error("Failed UTF-8 to ANSI: Unicode to ANSI conversion failed");
-    }
-    
-    return ansi_str;
+    std::wstring wide_str = windows_utf8_to_wstring(utf8_str);
+    return windows_wstring_to_ansi(wide_str);
 }
 
 // 直接转换：ANSI -> UTF-8 (Windows)
-static std::string windows_ansi_to_utf8_direct(const std::string& ansi_str) {
+static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
     // ANSI -> Unicode -> UTF-8
-    
-    // 步骤1：ANSI -> Unicode
-    int wide_length = MultiByteToWideChar(
-        CP_ACP, 0, ansi_str.c_str(), 
-        static_cast<int>(ansi_str.length()), nullptr, 0
-    );
-    
-    if (wide_length <= 0) {
-        throw std::runtime_error("Failed ANSI to UTF-8: ANSI to Unicode conversion failed");
-    }
-    
-    std::wstring wide_str(wide_length, L'\0');
-    int result1 = MultiByteToWideChar(
-        CP_ACP, 0, ansi_str.c_str(), 
-        static_cast<int>(ansi_str.length()), &wide_str[0], wide_length
-    );
-    
-    if (result1 <= 0) {
-        throw std::runtime_error("Failed ANSI to UTF-8: ANSI to Unicode conversion failed");
-    }
-    
-    // 步骤2：Unicode -> UTF-8
-    int utf8_length = WideCharToMultiByte(
-        CP_UTF8, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), nullptr, 0, nullptr, nullptr
-    );
-    
-    if (utf8_length <= 0) {
-        throw std::runtime_error("Failed ANSI to UTF-8: Unicode to UTF-8 conversion failed");
-    }
-    
-    std::string utf8_str(utf8_length, '\0');
-    int result2 = WideCharToMultiByte(
-        CP_UTF8, 0, wide_str.c_str(), 
-        static_cast<int>(wide_str.length()), &utf8_str[0], utf8_length, nullptr, nullptr
-    );
-    
-    if (result2 <= 0) {
-        throw std::runtime_error("Failed ANSI to UTF-8: Unicode to UTF-8 conversion failed");
-    }
-    
-    return utf8_str;
+    std::wstring wide_str = windows_ansi_to_wstring(ansi_str);
+    return windows_wstring_to_utf8(wide_str);
 }
 
 #else // 非 Windows 平台
 
+// POSIX 平台安全转换包装器
+template<typename Converter>
+static auto posix_safe_convert(Converter converter, const char* operation) {
+    return [converter, operation](const auto& input) {
+        try {
+            return converter(input);
+        } catch (const std::range_error& e) {
+            throw std::runtime_error(std::string("Failed to ") + operation + ": " + e.what());
+        }
+    };
+}
+
 static std::wstring posix_utf8_to_wstring(const std::string& utf8_str) {
-    try {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        return converter.from_bytes(utf8_str);
-    } catch (const std::range_error& e) {
-        throw std::runtime_error("Failed to convert UTF-8 to wide string: " + std::string(e.what()));
-    }
+    auto converter = posix_safe_convert(
+        [](const std::string& str) {
+            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+            return conv.from_bytes(str);
+        }, 
+        "convert UTF-8 to wide string"
+    );
+    return converter(utf8_str);
 }
 
 static std::string posix_wstring_to_utf8(const std::wstring& wide_str) {
-    try {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        return converter.to_bytes(wide_str);
-    } catch (const std::range_error& e) {
-        throw std::runtime_error("Failed to convert wide string to UTF-8: " + std::string(e.what()));
-    }
+    auto converter = posix_safe_convert(
+        [](const std::wstring& str) {
+            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+            return conv.to_bytes(str);
+        }, 
+        "convert wide string to UTF-8"
+    );
+    return converter(wide_str);
 }
 
 static std::wstring posix_ansi_to_wstring(const std::string& ansi_str) {
     // ANSI -> UTF-8 -> wstring
-    std::string utf8_str = posix_ansi_to_utf8_direct(ansi_str);
+    std::string utf8_str = posix_ansi_to_utf8(ansi_str);
     return posix_utf8_to_wstring(utf8_str);
 }
 
 static std::string posix_wstring_to_ansi(const std::wstring& wide_str) {
     // wstring -> UTF-8 -> ANSI
     std::string utf8_str = posix_wstring_to_utf8(wide_str);
-    return posix_utf8_to_ansi_direct(utf8_str);
+    return posix_utf8_to_ansi(utf8_str);
 }
 
 // 直接转换：UTF-8 -> ANSI (Linux/Unix)
-static std::string posix_utf8_to_ansi_direct(const std::string& utf8_str) {
+static std::string posix_utf8_to_ansi(const std::string& utf8_str) {
     std::string system_encoding = get_system_encoding();
     return posix_convert_encoding(utf8_str, "UTF-8", system_encoding.c_str());
 }
 
 // 直接转换：ANSI -> UTF-8 (Linux/Unix)
-static std::string posix_ansi_to_utf8_direct(const std::string& ansi_str) {
+static std::string posix_ansi_to_utf8(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
     return posix_convert_encoding(ansi_str, system_encoding.c_str(), "UTF-8");
 }
