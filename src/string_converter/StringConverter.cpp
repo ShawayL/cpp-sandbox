@@ -160,14 +160,12 @@ static std::string windows_wstring_to_ansi(const std::wstring& wide_str) {
     return windows_wstring_to_mb(wide_str, CP_ACP, "Unicode to ANSI");
 }
 
-// 直接转换：UTF-8 -> ANSI (Windows)
 static std::string windows_utf8_to_ansi(const std::string& utf8_str) {
     // UTF-8 -> Unicode -> ANSI
     std::wstring wide_str = windows_utf8_to_wstring(utf8_str);
     return windows_wstring_to_ansi(wide_str);
 }
 
-// 直接转换：ANSI -> UTF-8 (Windows)
 static std::string windows_ansi_to_utf8(const std::string& ansi_str) {
     // ANSI -> Unicode -> UTF-8
     std::wstring wide_str = windows_ansi_to_wstring(ansi_str);
@@ -206,13 +204,11 @@ static std::string posix_wstring_to_ansi(const std::wstring& wide_str) {
     return posix_utf8_to_ansi(utf8_str);
 }
 
-// 直接转换：UTF-8 -> ANSI (Linux/Unix)
 static std::string posix_utf8_to_ansi(const std::string& utf8_str) {
     std::string system_encoding = get_system_encoding();
     return posix_convert_encoding(utf8_str, "UTF-8", system_encoding.c_str());
 }
 
-// 直接转换：ANSI -> UTF-8 (Linux/Unix)
 static std::string posix_ansi_to_utf8(const std::string& ansi_str) {
     std::string system_encoding = get_system_encoding();
     return posix_convert_encoding(ansi_str, system_encoding.c_str(), "UTF-8");
