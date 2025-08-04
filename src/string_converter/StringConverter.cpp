@@ -422,7 +422,7 @@ static std::string get_system_encoding() {
     }
     
     // 默认编码
-    return "ISO-8859-1"; // 或者使用 "CP1252" 在某些系统上
+    return "UTF-8";
 }
 
 #endif

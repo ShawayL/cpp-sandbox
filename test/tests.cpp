@@ -35,7 +35,7 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::wstring wide_special = StringConverter::utf8_to_wstring(utf8_special);
         REQUIRE(wide_special == L"Hello! @#$%^&*()");
         
-        // 测试中文字符串 - 使用显式的 UTF-8 字节序列确保跨平台兼容性
+        // 测试中文字符串
         // "你好世界" 的 UTF-8 编码
         std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
         // "你好世界" 的 Unicode 码点
@@ -58,7 +58,7 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string utf8_special = StringConverter::wstring_to_utf8(wide_special);
         REQUIRE(utf8_special == "Hello! @#$%^&*()");
         
-        // 测试中文字符串 - 使用显式的 UTF-8 字节序列确保跨平台兼容性
+        // 测试中文字符串
         // "你好世界" 的 Unicode 码点
         std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
         // "你好世界" 的 UTF-8 编码
@@ -81,10 +81,14 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::wstring wide_special = StringConverter::ansi_to_wstring(ansi_special);
         REQUIRE(wide_special == L"Hello! @#$%^&*()");
         
-        // 测试简单英文句子
-        std::string ansi_sentence = "Welcome to C++ world!";
-        std::wstring wide_sentence = L"Welcome to C++ world!";
-        REQUIRE(StringConverter::ansi_to_wstring(ansi_sentence) == wide_sentence);
+        // 测试中文字符串（注意：ANSI转换依赖于系统locale）
+        // 使用已知的宽字符串，转换为ANSI再转回宽字符串进行往返测试
+        std::wstring wide_original = L"\u4F60\u597D\u4E16\u754C"; // "你好世界"
+        std::string ansi_converted = StringConverter::wstring_to_ansi(wide_original);
+        REQUIRE(!ansi_converted.empty());
+        // 测试往返转换的一致性
+        std::wstring wide_roundtrip = StringConverter::ansi_to_wstring(ansi_converted);
+        REQUIRE(wide_roundtrip == wide_original);
     }
     
     SECTION("wstring_to_ansi") {
@@ -102,10 +106,15 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string ansi_special = StringConverter::wstring_to_ansi(wide_special);
         REQUIRE(ansi_special == "Hello! @#$%^&*()");
         
-        // 测试简单英文句子
-        std::wstring wide_sentence = L"Welcome to C++ world!";
-        std::string ansi_sentence = "Welcome to C++ world!";
-        REQUIRE(StringConverter::wstring_to_ansi(wide_sentence) == ansi_sentence);
+        // 测试中文字符串（注意：ANSI转换可能依赖于系统locale，这里测试基本转换功能）
+        // "你好世界" 的 Unicode 码点
+        std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
+        std::string ansi_chinese = StringConverter::wstring_to_ansi(wide_chinese);
+        // 注意：ANSI编码结果取决于系统locale设置
+        REQUIRE(!ansi_chinese.empty());
+        // 测试往返转换的一致性
+        std::wstring wide_roundtrip = StringConverter::ansi_to_wstring(ansi_chinese);
+        REQUIRE(wide_roundtrip == wide_chinese);
     }
     
     SECTION("utf8_to_ansi") {
@@ -123,10 +132,15 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string ansi_special = StringConverter::utf8_to_ansi(utf8_special);
         REQUIRE(ansi_special == "Hello! @#$%^&*()");
         
-        // 测试简单英文句子
-        std::string utf8_sentence = "Welcome to C++ world!";
-        std::string ansi_sentence = "Welcome to C++ world!";
-        REQUIRE(StringConverter::utf8_to_ansi(utf8_sentence) == ansi_sentence);
+        // 测试中文字符串
+        // "你好世界" 的 UTF-8 编码
+        std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
+        std::string ansi_chinese = StringConverter::utf8_to_ansi(utf8_chinese);
+        // 注意：ANSI编码结果取决于系统locale设置
+        REQUIRE(!ansi_chinese.empty());
+        // 测试往返转换的一致性
+        std::string utf8_roundtrip = StringConverter::ansi_to_utf8(ansi_chinese);
+        REQUIRE(utf8_roundtrip == utf8_chinese);
     }
     
     SECTION("ansi_to_utf8") {
@@ -144,9 +158,13 @@ TEST_CASE("StringConverter", "[StringConverter]") {
         std::string utf8_special = StringConverter::ansi_to_utf8(ansi_special);
         REQUIRE(utf8_special == "Hello! @#$%^&*()");
         
-        // 测试简单英文句子
-        std::string ansi_sentence = "Welcome to C++ world!";
-        std::string utf8_sentence = "Welcome to C++ world!";
-        REQUIRE(StringConverter::ansi_to_utf8(ansi_sentence) == utf8_sentence);
+        // 测试中文字符串（注意：需要系统支持相应的ANSI编码）
+        // 使用已知的UTF-8字符串，转换为ANSI再转回UTF-8进行往返测试
+        std::string utf8_original = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c"; // "你好世界"
+        std::string ansi_converted = StringConverter::utf8_to_ansi(utf8_original);
+        REQUIRE(!ansi_converted.empty());
+        // 测试往返转换的一致性
+        std::string utf8_roundtrip = StringConverter::ansi_to_utf8(ansi_converted);
+        REQUIRE(utf8_roundtrip == utf8_original);
     }
 }
