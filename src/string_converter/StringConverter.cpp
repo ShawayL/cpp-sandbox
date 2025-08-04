@@ -216,8 +216,8 @@ static OutputType posix_generic_convert(const InputType& input,
     }
     
     // 如果源编码和目标编码相同，且类型相同，直接返回
-    if (std::is_same_v<InputType, OutputType> && strcmp(from_encoding, to_encoding) == 0) {
-        if constexpr (std::is_same_v<InputType, OutputType>) {
+    if constexpr (std::is_same<InputType, OutputType>::value) {
+        if (strcmp(from_encoding, to_encoding) == 0) {
             return input;
         }
     }
