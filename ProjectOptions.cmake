@@ -8,11 +8,13 @@ macro(cpp_sandbox_setup_options)
   endif()
 
   option(CPP_SANDBOX_USE_CPM "Use CPM to setup dependencies" ON)
+  option(CPP_SANDBOX_BUILD_WITH_GDAL "Build with gdal" OFF)
 
   if(NOT PROJECT_IS_TOP_LEVEL)
     mark_as_advanced(CPP_SANDBOX_BUILD_TESTS
       CPP_SANDBOX_INSTALL
       CPP_SANDBOX_USE_CPM
+      CPP_SANDBOX_BUILD_WITH_GDAL
     )
   endif()
 endmacro()

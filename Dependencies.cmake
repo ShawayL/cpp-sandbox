@@ -40,4 +40,8 @@ function(cpp_sandbox_setup_dependencies)
     endif()
   endif()
 
+  if(CPP_SANDBOX_BUILD_WITH_GDAL)
+    find_package(GDAL REQUIRED)
+  endif()
+
 endfunction()
