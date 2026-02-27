@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.23)
 project(
   cpp_sandbox
   VERSION 0.0.1
-  DESCRIPTION ""
+  DESCRIPTION "A personal C++ sandbox for daily practice, experiments, and implementing ideas"
   HOMEPAGE_URL "https://github.com/ShawayL/cpp-sandbox"
   LANGUAGES CXX C)
 
