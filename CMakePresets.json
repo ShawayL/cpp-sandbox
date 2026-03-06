@@ -1,30 +1,483 @@
 {
-    "version": 10,
+    "version": 6,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 21,
+        "minor": 26,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "conf-common",
+            "name": "base",
             "hidden": true,
             "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}"
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "cacheVariables": {}
         },
         {
-            "name": "conf-common-debug",
-            "inherits": "conf-common",
+            "name": "windows-base",
+            "hidden": true,
+            "inherits": "base",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "linux-base",
+            "hidden": true,
+            "inherits": "base",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "vs-base",
+            "hidden": true,
+            "inherits": "windows-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            }
+        },
+        {
+            "name": "vs2026-base",
+            "hidden": true,
+            "inherits": "vs-base",
+            "generator": "Visual Studio 18 2026"
+        },
+        {
+            "name": "vs2022-base",
+            "hidden": true,
+            "inherits": "vs-base",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "vs2019-base",
+            "hidden": true,
+            "inherits": "vs-base",
+            "generator": "Visual Studio 16 2019"
+        },
+        {
+            "name": "ninja-msvc-base",
+            "hidden": true,
+            "inherits": "windows-base",
+            "generator": "Ninja",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        },
+        {
+            "name": "gcc-make-base",
+            "hidden": true,
+            "inherits": "linux-base",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "gcc-ninja-base",
+            "hidden": true,
+            "inherits": "linux-base",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "debug-base",
+            "hidden": true,
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
-            "name": "conf-common-release",
-            "inherits": "conf-common",
+            "name": "release-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "reldeb-base",
+            "hidden": true,
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
+        },
+        {
+            "name": "vs2026-debug",
+            "displayName": "Visual Studio 2026 Debug",
+            "description": "Debug build using Visual Studio 2026 (Windows only)",
+            "inherits": [
+                "vs2026-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "vs2026-release",
+            "displayName": "Visual Studio 2026 Release",
+            "description": "Release build using Visual Studio 2026 (Windows only)",
+            "inherits": [
+                "vs2026-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "vs2026-reldeb",
+            "displayName": "Visual Studio 2026 RelWithDebInfo",
+            "description": "Release with Debug Info build using Visual Studio 2026 (Windows only)",
+            "inherits": [
+                "vs2026-base",
+                "reldeb-base"
+            ]
+        },
+        {
+            "name": "vs2022-debug",
+            "displayName": "Visual Studio 2022 Debug",
+            "description": "Debug build using Visual Studio 2022 (Windows only)",
+            "inherits": [
+                "vs2022-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "vs2022-release",
+            "displayName": "Visual Studio 2022 Release",
+            "description": "Release build using Visual Studio 2022 (Windows only)",
+            "inherits": [
+                "vs2022-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "vs2022-reldeb",
+            "displayName": "Visual Studio 2022 RelWithDebInfo",
+            "description": "Release with Debug Info build using Visual Studio 2022 (Windows only)",
+            "inherits": [
+                "vs2022-base",
+                "reldeb-base"
+            ]
+        },
+        {
+            "name": "vs2019-debug",
+            "displayName": "Visual Studio 2019 Debug",
+            "description": "Debug build using Visual Studio 2019 (Windows only)",
+            "inherits": [
+                "vs2019-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "vs2019-release",
+            "displayName": "Visual Studio 2019 Release",
+            "description": "Release build using Visual Studio 2019 (Windows only)",
+            "inherits": [
+                "vs2019-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "vs2019-reldeb",
+            "displayName": "Visual Studio 2019 RelWithDebInfo",
+            "description": "Release with Debug Info build using Visual Studio 2019 (Windows only)",
+            "inherits": [
+                "vs2019-base",
+                "reldeb-base"
+            ]
+        },
+        {
+            "name": "ninja-msvc-debug",
+            "displayName": "Ninja MSVC Debug",
+            "description": "Debug build using Ninja with MSVC (Windows only)",
+            "inherits": [
+                "ninja-msvc-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "ninja-msvc-release",
+            "displayName": "Ninja MSVC Release",
+            "description": "Release build using Ninja with MSVC (Windows only)",
+            "inherits": [
+                "ninja-msvc-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "ninja-msvc-reldeb",
+            "displayName": "Ninja MSVC RelWithDebInfo",
+            "description": "Release with Debug Info build using Ninja with MSVC (Windows only)",
+            "inherits": [
+                "ninja-msvc-base",
+                "reldeb-base"
+            ]
+        },
+        {
+            "name": "gcc-debug",
+            "displayName": "GCC Make Debug",
+            "description": "Debug build using GCC with Unix Makefiles (Linux only)",
+            "inherits": [
+                "gcc-make-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "gcc-release",
+            "displayName": "GCC Make Release",
+            "description": "Release build using GCC with Unix Makefiles (Linux only)",
+            "inherits": [
+                "gcc-make-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "gcc-reldeb",
+            "displayName": "GCC Make RelWithDebInfo",
+            "description": "Release with Debug Info build using GCC with Unix Makefiles (Linux only)",
+            "inherits": [
+                "gcc-make-base",
+                "reldeb-base"
+            ]
+        },
+        {
+            "name": "ninja-gcc-debug",
+            "displayName": "Ninja GCC Debug",
+            "description": "Debug build using Ninja with GCC (Linux only)",
+            "inherits": [
+                "gcc-ninja-base",
+                "debug-base"
+            ]
+        },
+        {
+            "name": "ninja-gcc-release",
+            "displayName": "Ninja GCC Release",
+            "description": "Release build using Ninja with GCC (Linux only)",
+            "inherits": [
+                "gcc-ninja-base",
+                "release-base"
+            ]
+        },
+        {
+            "name": "ninja-gcc-reldeb",
+            "displayName": "Ninja GCC RelWithDebInfo",
+            "description": "Release with Debug Info build using Ninja with GCC (Linux only)",
+            "inherits": [
+                "gcc-ninja-base",
+                "reldeb-base"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "vs2026-debug",
+            "displayName": "Visual Studio 2026 Debug",
+            "configurePreset": "vs2026-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2026-release",
+            "displayName": "Visual Studio 2026 Release",
+            "configurePreset": "vs2026-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2026-reldeb",
+            "displayName": "Visual Studio 2026 RelWithDebInfo",
+            "configurePreset": "vs2026-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "vs2022-debug",
+            "displayName": "Visual Studio 2022 Debug",
+            "configurePreset": "vs2022-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2022-release",
+            "displayName": "Visual Studio 2022 Release",
+            "configurePreset": "vs2022-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2022-reldeb",
+            "displayName": "Visual Studio 2022 RelWithDebInfo",
+            "configurePreset": "vs2022-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "vs2019-debug",
+            "displayName": "Visual Studio 2019 Debug",
+            "configurePreset": "vs2019-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2019-release",
+            "displayName": "Visual Studio 2019 Release",
+            "configurePreset": "vs2019-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2019-reldeb",
+            "displayName": "Visual Studio 2019 RelWithDebInfo",
+            "configurePreset": "vs2019-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "ninja-msvc-debug",
+            "displayName": "Ninja MSVC Debug",
+            "configurePreset": "ninja-msvc-debug"
+        },
+        {
+            "name": "ninja-msvc-release",
+            "displayName": "Ninja MSVC Release",
+            "configurePreset": "ninja-msvc-release"
+        },
+        {
+            "name": "ninja-msvc-reldeb",
+            "displayName": "Ninja MSVC RelWithDebInfo",
+            "configurePreset": "ninja-msvc-reldeb"
+        },
+        {
+            "name": "gcc-debug",
+            "displayName": "GCC Make Debug",
+            "configurePreset": "gcc-debug"
+        },
+        {
+            "name": "gcc-release",
+            "displayName": "GCC Make Release",
+            "configurePreset": "gcc-release"
+        },
+        {
+            "name": "gcc-reldeb",
+            "displayName": "GCC Make RelWithDebInfo",
+            "configurePreset": "gcc-reldeb"
+        },
+        {
+            "name": "ninja-gcc-debug",
+            "displayName": "Ninja GCC Debug",
+            "configurePreset": "ninja-gcc-debug"
+        },
+        {
+            "name": "ninja-gcc-release",
+            "displayName": "Ninja GCC Release",
+            "configurePreset": "ninja-gcc-release"
+        },
+        {
+            "name": "ninja-gcc-reldeb",
+            "displayName": "Ninja GCC RelWithDebInfo",
+            "configurePreset": "ninja-gcc-reldeb"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "vs2026-debug",
+            "displayName": "Visual Studio 2026 Debug",
+            "configurePreset": "vs2026-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2026-release",
+            "displayName": "Visual Studio 2026 Release",
+            "configurePreset": "vs2026-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2026-reldeb",
+            "displayName": "Visual Studio 2026 RelWithDebInfo",
+            "configurePreset": "vs2026-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "vs2022-debug",
+            "displayName": "Visual Studio 2022 Debug",
+            "configurePreset": "vs2022-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2022-release",
+            "displayName": "Visual Studio 2022 Release",
+            "configurePreset": "vs2022-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2022-reldeb",
+            "displayName": "Visual Studio 2022 RelWithDebInfo",
+            "configurePreset": "vs2022-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "vs2019-debug",
+            "displayName": "Visual Studio 2019 Debug",
+            "configurePreset": "vs2019-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs2019-release",
+            "displayName": "Visual Studio 2019 Release",
+            "configurePreset": "vs2019-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2019-reldeb",
+            "displayName": "Visual Studio 2019 RelWithDebInfo",
+            "configurePreset": "vs2019-reldeb",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "ninja-msvc-debug",
+            "displayName": "Ninja MSVC Debug",
+            "configurePreset": "ninja-msvc-debug"
+        },
+        {
+            "name": "ninja-msvc-release",
+            "displayName": "Ninja MSVC Release",
+            "configurePreset": "ninja-msvc-release"
+        },
+        {
+            "name": "ninja-msvc-reldeb",
+            "displayName": "Ninja MSVC RelWithDebInfo",
+            "configurePreset": "ninja-msvc-reldeb"
+        },
+        {
+            "name": "gcc-debug",
+            "displayName": "GCC Make Debug",
+            "configurePreset": "gcc-debug"
+        },
+        {
+            "name": "gcc-release",
+            "displayName": "GCC Make Release",
+            "configurePreset": "gcc-release"
+        },
+        {
+            "name": "gcc-reldeb",
+            "displayName": "GCC Make RelWithDebInfo",
+            "configurePreset": "gcc-reldeb"
+        },
+        {
+            "name": "ninja-gcc-debug",
+            "displayName": "Ninja GCC Debug",
+            "configurePreset": "ninja-gcc-debug"
+        },
+        {
+            "name": "ninja-gcc-release",
+            "displayName": "Ninja GCC Release",
+            "configurePreset": "ninja-gcc-release"
+        },
+        {
+            "name": "ninja-gcc-reldeb",
+            "displayName": "Ninja GCC RelWithDebInfo",
+            "configurePreset": "ninja-gcc-reldeb"
         }
     ]
 }
