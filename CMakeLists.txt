@@ -41,7 +41,7 @@ include(Dependencies.cmake)
 cpp_sandbox_setup_dependencies()
 
 # 添加external目录
-# add_subdirectory(external)
+add_subdirectory(external)
 
 # 关闭替代标记
 if(CMAKE_COMPILER_IS_GNUCXX)
