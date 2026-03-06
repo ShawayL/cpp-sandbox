@@ -1,5 +1,5 @@
 if(CPP_SANDBOX_USE_CPM)
-  include(cmake/CPM.cmake)
+  include(CPM)
 endif()
 
 # Done as a function so that updates to variables like
