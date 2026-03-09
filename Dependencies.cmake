@@ -6,7 +6,6 @@ endif()
 # CMAKE_CXX_FLAGS don't propagate out to other
 # targets
 function(cpp_sandbox_setup_dependencies)
-
   # For each dependency, see if it's
   # already been provided to us by a parent project
 
@@ -43,5 +42,4 @@ function(cpp_sandbox_setup_dependencies)
   if(CPP_SANDBOX_BUILD_WITH_GDAL)
     find_package(GDAL REQUIRED)
   endif()
-
 endfunction()

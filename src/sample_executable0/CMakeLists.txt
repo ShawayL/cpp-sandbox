@@ -6,5 +6,5 @@ target_compile_features(sample_executable0 PRIVATE cxx_std_11)
 
 target_link_libraries(
   sample_executable0
-  PRIVATE cpp_sandbox::sample_library0
-          cpp_sandbox::sample_library1)
+  PRIVATE cpp_sandbox::sample_library0 cpp_sandbox::sample_library1
+)

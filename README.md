@@ -10,6 +10,13 @@
 - 实验算法、数据结构和编程技巧
 - 作为个人 C++ 学习和成长的代码沙盒
 
+## CMake 格式化
+本项目使用 `gersemi` 对 CMake 相关文件进行格式化。
+
+```bash
+gersemi -i CMakeLists.txt Dependencies.cmake ProjectOptions.cmake external/CMakeLists.txt cmake src test
+```
+
 ---
 
 This repository is a personal C++ sandbox for daily practice, experiments, and implementing ideas. Feel free to add any code you want!

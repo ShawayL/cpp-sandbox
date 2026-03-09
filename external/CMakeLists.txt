@@ -9,7 +9,7 @@
 #   set(SQLITECPP_RUN_DOXYGEN OFF CACHE BOOL "" FORCE)
 #   add_subdirectory(SQLiteCpp EXCLUDE_FROM_ALL)
 # endfunction()
-# 
+#
 # function(add_external_fmt)
 #   set(FMT_TEST OFF CACHE BOOL "" FORCE)
 #   set(FMT_DOC OFF CACHE BOOL "" FORCE)
@@ -17,13 +17,13 @@
 #   set(FMT_UNICODE OFF CACHE BOOL "" FORCE)
 #   add_subdirectory(fmt EXCLUDE_FROM_ALL)
 # endfunction()
-# 
+#
 # function(add_external_json)
 #   set(JSON_BuildTests OFF CACHE BOOL "" FORCE)
 #   set(JSON_Install OFF CACHE BOOL "" FORCE)
 #   add_subdirectory(json EXCLUDE_FROM_ALL)
 # endfunction()
-# 
+#
 # function(add_external_spdlog)
 #   set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
 #   set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -37,7 +37,7 @@
 #   endif()
 #   add_subdirectory(spdlog EXCLUDE_FROM_ALL)
 # endfunction()
-# 
+#
 # function(add_external_googletest)
 #   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 #   set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
@@ -46,7 +46,7 @@
 #   add_subdirectory(googletest EXCLUDE_FROM_ALL)
 #   mark_as_advanced(BUILD_GMOCK INSTALL_GTEST GTEST_HAS_ABSL)
 # endfunction()
-# 
+#
 # function(add_external_benchmark)
 #   set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
 #   set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
@@ -55,7 +55,7 @@
 #   add_subdirectory(benchmark EXCLUDE_FROM_ALL)
 #   mark_as_advanced(CXXFEATURECHECK_DEBUG)
 # endfunction()
-# 
+#
 function(add_external_catch2)
   set(CATCH_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
   set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
@@ -63,7 +63,7 @@ function(add_external_catch2)
   add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 endfunction()
-# 
+#
 # function(add_external_cli11)
 #   set(BUILD_TESTING OFF)
 #   set(CLI11_BOOST OFF CACHE BOOL "" FORCE)

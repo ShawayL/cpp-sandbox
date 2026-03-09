@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.26)
 project(
   cpp_sandbox
   VERSION 0.0.1
-  DESCRIPTION "A personal C++ sandbox for daily practice, experiments, and implementing ideas"
+  DESCRIPTION
+    "A personal C++ sandbox for daily practice, experiments, and implementing ideas"
   HOMEPAGE_URL "https://github.com/ShawayL/cpp-sandbox"
   LANGUAGES CXX C
 )
@@ -57,7 +58,7 @@ if(LINKER_SUPPORTS_DISABLE_NEWTAGS)
   add_link_options(-Wl,--disable-new-dtags)
 endif()
 check_linker_flag(CXX "-Wl,--exclude-libs,ALL" LINKER_SUPPORTS_EXCLUDE_LIBS)
-if (LINKER_SUPPORTS_EXCLUDE_LIBS)
+if(LINKER_SUPPORTS_EXCLUDE_LIBS)
   message(STATUS "Linker supports --exclude-libs,ALL")
   add_link_options(-Wl,--exclude-libs,ALL)
 endif()
@@ -70,7 +71,10 @@ if(CPP_SANDBOX_BUILD_TESTS AND BUILD_TESTING)
   add_subdirectory(test)
   # 设置vs默认启动项目
   if(WIN32 AND MSVC)
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT tests)
+    set_property(
+      DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+      PROPERTY VS_STARTUP_PROJECT tests
+    )
   endif()
 endif()
 
@@ -87,7 +91,10 @@ if(LINUX)
       set(LIB_PATH $<TARGET_FILE:${TARGET}>)
     endif()
     if(NOT LIB_PATH)
-      message(WARNING "Target ${TARGET} does not have a library file associated.")
+      message(
+        WARNING
+        "Target ${TARGET} does not have a library file associated."
+      )
       set(${OUT_VAR} "" PARENT_SCOPE)
       return()
     endif()
@@ -102,18 +109,19 @@ endif()
 
 #定义安装空目录的宏
 macro(install_empty_directory dirname root)
-    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dirname}")
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${dirname} DESTINATION ${root})
+  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dirname}")
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${dirname} DESTINATION ${root})
 endmacro()
 
 # 安装目标
 if(CPP_SANDBOX_INSTALL)
-  install(TARGETS
-    sample_library0
-    sample_library1
-    string_converter
-    sample_executable0
-    find_submatrix
+  install(
+    TARGETS
+      sample_library0
+      sample_library1
+      string_converter
+      sample_executable0
+      find_submatrix
     EXPORT cpp_sandboxTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -127,7 +135,8 @@ if(CPP_SANDBOX_INSTALL)
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
   )
 
-  configure_package_config_file("cmake/${PROJECT_NAME}Config.cmake.in"
+  configure_package_config_file(
+    "cmake/${PROJECT_NAME}Config.cmake.in"
     "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
     INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
   )
@@ -150,7 +159,8 @@ if(CPP_SANDBOX_INSTALL)
     set(CPACK_LIB_TYPE "static")
   endif()
 
-  set(CPACK_PACKAGE_FILE_NAME
+  set(
+    CPACK_PACKAGE_FILE_NAME
     "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_BUILD_TYPE}-${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}-${CPACK_LIB_TYPE}"
   )
 
