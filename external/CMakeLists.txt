@@ -61,6 +61,7 @@ function(add_external_catch2)
   set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
   set(CATCH_DEVELOPMENT_BUILD OFF CACHE BOOL "" FORCE)
   add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
+  # 将 Catch2 追加的模块路径传递到父作用域
   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 endfunction()
 #
@@ -87,6 +88,7 @@ endfunction()
 add_external_catch2()
 # add_external_cli11()
 
+# 将模块路径进一步传递到上层 CMakeLists.txt
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 
 get_cmake_property(CACHE_VARS CACHE_VARIABLES)
