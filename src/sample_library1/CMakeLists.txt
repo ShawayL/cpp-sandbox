@@ -7,7 +7,7 @@ add_library(cpp_sandbox::sample_library1 ALIAS sample_library1)
 generate_export_header(
   sample_library1
   EXPORT_FILE_NAME
-    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library1_export.hpp
+    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library1/sample_library1_export.hpp
 )
 
 target_sources(sample_library1 PRIVATE sample_library1.cpp)
@@ -19,8 +19,8 @@ target_sources(
       TYPE HEADERS
       BASE_DIRS "${PROJECT_SOURCE_DIR}/include" "${PROJECT_BINARY_DIR}/include"
       FILES
-        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library1.hpp
-        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library1_export.hpp
+        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library1/sample_library1.hpp
+        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library1/sample_library1_export.hpp
 )
 
 target_include_directories(

@@ -1,7 +1,7 @@
 #ifndef STRING_CONVERTER_H
 #define STRING_CONVERTER_H
 
-#include <cpp_sandbox/string_converter_export.hpp>
+#include <cpp_sandbox/string_converter/string_converter_export.hpp>
 #include <string>
 
 class STRING_CONVERTER_EXPORT StringConverter {

@@ -1,7 +1,7 @@
 #ifndef SAMPLE_LIBRARY1_HPP
 #define SAMPLE_LIBRARY1_HPP
 
-#include <cpp_sandbox/sample_library1_export.hpp>
+#include <cpp_sandbox/sample_library1/sample_library1_export.hpp>
 
 namespace sample_library1 {
 

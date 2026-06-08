@@ -1,5 +1,5 @@
-#include <cpp_sandbox/sample_library0.hpp>
-#include <cpp_sandbox/sample_library1.hpp>
+#include <cpp_sandbox/sample_library0/sample_library0.hpp>
+#include <cpp_sandbox/sample_library1/sample_library1.hpp>
 #include <iostream>
 
 int main() {

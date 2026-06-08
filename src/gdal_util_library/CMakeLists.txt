@@ -7,7 +7,7 @@ add_library(cpp_sandbox::gdal_util_library ALIAS gdal_util_library)
 generate_export_header(
   gdal_util_library
   EXPORT_FILE_NAME
-    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/gdal_util_library_export.hpp
+    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/gdal_util_library/gdal_util_library_export.hpp
 )
 
 target_sources(gdal_util_library PRIVATE gdal_util_library.cpp)
@@ -19,8 +19,8 @@ target_sources(
       TYPE HEADERS
       BASE_DIRS "${PROJECT_SOURCE_DIR}/include" "${PROJECT_BINARY_DIR}/include"
       FILES
-        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/gdal_util_library.hpp
-        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/gdal_util_library_export.hpp
+        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/gdal_util_library/gdal_util_library.hpp
+        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/gdal_util_library/gdal_util_library_export.hpp
 )
 
 target_include_directories(

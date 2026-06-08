@@ -1,5 +1,5 @@
-#include <cpp_sandbox/sample_library0.hpp>
-#include <cpp_sandbox/sample_library1.hpp>
+#include <cpp_sandbox/sample_library0/sample_library0.hpp>
+#include <cpp_sandbox/sample_library1/sample_library1.hpp>
 
 #ifdef sample_library1_STATIC_DEFINE
 int static_library1 = 0;

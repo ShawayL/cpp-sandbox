@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
-#include <cpp_sandbox/sample_library0.hpp>
-#include <cpp_sandbox/sample_library1.hpp>
-#include <cpp_sandbox/StringConverter.hpp>
+#include <cpp_sandbox/sample_library0/sample_library0.hpp>
+#include <cpp_sandbox/sample_library1/sample_library1.hpp>
+#include <cpp_sandbox/string_converter/StringConverter.hpp>
 #include <algorithm>
 #include <vector>
 

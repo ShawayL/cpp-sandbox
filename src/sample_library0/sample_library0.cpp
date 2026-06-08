@@ -1,4 +1,4 @@
-#include <cpp_sandbox/sample_library0.hpp>
+#include <cpp_sandbox/sample_library0/sample_library0.hpp>
 
 #ifdef SAMPLE_LIBRARY0_STATIC_DEFINE
 int static_library0 = 0;

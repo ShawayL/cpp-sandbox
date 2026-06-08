@@ -7,7 +7,7 @@ add_library(cpp_sandbox::string_converter ALIAS string_converter)
 generate_export_header(
   string_converter
   EXPORT_FILE_NAME
-    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter_export.hpp
+    ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter/string_converter_export.hpp
 )
 
 target_sources(string_converter PRIVATE StringConverter.cpp)
@@ -19,8 +19,8 @@ target_sources(
       TYPE HEADERS
       BASE_DIRS "${PROJECT_SOURCE_DIR}/include" "${PROJECT_BINARY_DIR}/include"
       FILES
-        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/StringConverter.hpp
-        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter_export.hpp
+        ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/string_converter/StringConverter.hpp
+        ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter/string_converter_export.hpp
 )
 
 target_include_directories(
