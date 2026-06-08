@@ -6,8 +6,7 @@ on:
       - '*'
   pull_request:
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   build-and-test:
@@ -60,12 +59,6 @@ jobs:
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
       CPACK_GENERATOR: ${{ matrix.os == 'windows-latest' && 'ZIP' || 'TGZ' }}
-      BINARY_SUFFIX: ${{ startsWith(matrix.os, 'windows') && '.exe' || '' }}
-      BINARY_PATH: >-
-        ${{ format(
-        startsWith(matrix.os, 'windows') && '{0}\build\{1}\' || '{0}/build/',
-        github.workspace,
-        matrix.optimized && 'RelWithDebInfo' || 'Debug') }}
 
     steps:
       - uses: actions/checkout@v4
@@ -133,9 +126,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
