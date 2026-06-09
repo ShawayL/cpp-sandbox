@@ -18,6 +18,8 @@ jobs:
       ${{ matrix.build_shared_lib && 'shared_library' || 'static_library' }}
       ${{ matrix.use_cpm && 'cpm' || 'system_deps' }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -58,7 +60,8 @@ jobs:
       CPP_SANDBOX_USE_CPM: ${{ matrix.use_cpm && 'ON' || 'OFF' }}
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
-      CPACK_GENERATOR: ${{ matrix.os == 'windows-latest' && 'ZIP' || 'TGZ' }}
+      CPACK_GENERATOR: ${{ startsWith(matrix.os, 'windows') && 'ZIP' || 'TGZ' }}
+      CMAKE_TOOLCHAIN_FILE: ''
 
     steps:
       - uses: actions/checkout@v4
@@ -77,10 +80,10 @@ jobs:
           brew install catch2
 
       - name: Install system dependencies (Windows)
-        if: matrix.os == 'windows-latest' && !matrix.use_cpm
+        if: startsWith(matrix.os, 'windows') && !matrix.use_cpm
         run: |
           vcpkg install catch2:x64-windows
-          echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+          echo "CMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
         shell: bash
 
       - name: Generate build config
@@ -98,14 +101,14 @@ jobs:
           --config "${{ env.CMAKE_BUILD_TYPE }}"
 
       - name: Run Tests
-        working-directory: ${{ github.workspace }}/build
+        working-directory: ${{ env.CMAKE_BUILD_DIR }}
         run: ctest -C "${{ env.CMAKE_BUILD_TYPE }}" --verbose
 
       - name: Test CMake installation
         run: cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target install
 
       - name: CPack
-        working-directory: ${{ github.workspace }}/build
+        working-directory: ${{ env.CMAKE_BUILD_DIR }}
         run: |
           cpack -C "${{ env.CMAKE_BUILD_TYPE }}" -G "${{ env.CPACK_GENERATOR }}"
 
@@ -115,8 +118,8 @@ jobs:
         with:
           name: package-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.optimized && 'release' || 'debug' }}-${{ matrix.build_shared_lib && 'shared' || 'static' }}
           path: |
-            ${{ github.workspace }}/build/*.zip
-            ${{ github.workspace }}/build/*.tar.gz
+            ${{ env.CMAKE_BUILD_DIR }}/*.zip
+            ${{ env.CMAKE_BUILD_DIR }}/*.tar.gz
           retention-days: 30
 
   release:
