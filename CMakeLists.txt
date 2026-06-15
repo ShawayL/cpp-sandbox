@@ -118,12 +118,15 @@ if(CPP_SANDBOX_INSTALL)
   set(cpp_sandbox_install_targets
     sample_library0
     sample_library1
-    string_converter
     sample_executable0
     find_submatrix
+    string_converter
   )
   if(CPP_SANDBOX_BUILD_WITH_GDAL)
-    list(APPEND cpp_sandbox_install_targets gdal_util_library)
+    list(APPEND cpp_sandbox_install_targets
+      gdal_util_library
+      gdal_test
+    )
   endif()
 
   install(
