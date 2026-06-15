@@ -28,7 +28,7 @@ TEST(StringConverterTest, utf8_to_wstring_chinese) {
     // "你好世界" UTF-8 encoding
     std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
     // "你好世界" Unicode codepoints
-    std::wstring wide_chinese = L"你好世界";
+    std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
     EXPECT_EQ(StringConverter::utf8_to_wstring(utf8_chinese), wide_chinese);
 }
 
@@ -56,7 +56,7 @@ TEST(StringConverterTest, wstring_to_utf8_special_chars) {
 
 TEST(StringConverterTest, wstring_to_utf8_chinese) {
     // "你好世界" Unicode codepoints
-    std::wstring wide_chinese = L"你好世界";
+    std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
     // "你好世界" UTF-8 encoding
     std::string utf8_chinese = "\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c";
     EXPECT_EQ(StringConverter::wstring_to_utf8(wide_chinese), utf8_chinese);
@@ -192,7 +192,7 @@ TEST(StringConverterTest, gb2312_to_wstring_chinese) {
     // "你好世界" GB2312 encoding
     std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
     // "你好世界" Unicode codepoints
-    std::wstring wide_chinese = L"你好世界";
+    std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
     EXPECT_EQ(StringConverter::gb2312_to_wstring(gb2312_chinese), wide_chinese);
 }
 
@@ -220,7 +220,7 @@ TEST(StringConverterTest, wstring_to_gb2312_special_chars) {
 
 TEST(StringConverterTest, wstring_to_gb2312_chinese) {
     // "你好世界" Unicode codepoints
-    std::wstring wide_chinese = L"你好世界";
+    std::wstring wide_chinese = L"\u4F60\u597D\u4E16\u754C";
     // "你好世界" GB2312 encoding
     std::string gb2312_chinese = "\xC4\xE3\xBA\xC3\xCA\xC0\xBD\xE7";
     EXPECT_EQ(StringConverter::wstring_to_gb2312(wide_chinese), gb2312_chinese);
