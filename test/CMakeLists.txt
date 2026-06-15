@@ -1,4 +1,7 @@
+include(GoogleTest)
 include(Catch)
+
+add_subdirectory(src)
 
 add_executable(tests tests.cpp)
 target_link_libraries(
