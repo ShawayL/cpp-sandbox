@@ -115,13 +115,20 @@ endmacro()
 
 # 安装目标
 if(CPP_SANDBOX_INSTALL)
+  set(cpp_sandbox_install_targets
+    sample_library0
+    sample_library1
+    string_converter
+    sample_executable0
+    find_submatrix
+  )
+  if(CPP_SANDBOX_BUILD_WITH_GDAL)
+    list(APPEND cpp_sandbox_install_targets gdal_util_library)
+  endif()
+
   install(
     TARGETS
-      sample_library0
-      sample_library1
-      string_converter
-      sample_executable0
-      find_submatrix
+      ${cpp_sandbox_install_targets}
     EXPORT cpp_sandboxTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
