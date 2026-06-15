@@ -9,6 +9,9 @@ SAMPLE_LIBRARY1_EXPORT int factorial(int) noexcept;
 
 int factorial_noexp(int) noexcept;
 
+// Demonstrates calling sample_library0's internal detail header: returns a * b.
+SAMPLE_LIBRARY1_EXPORT int multiply(int a, int b) noexcept;
+
 constexpr int factorial_constexpr(int input) noexcept {
   if (input == 0) {
     return 1;
