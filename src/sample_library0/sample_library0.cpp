@@ -1,5 +1,8 @@
 #include <cpp_sandbox/sample_library0/sample_library0.hpp>
 
+// Module-local internal header, included by file name via the PRIVATE include path.
+#include <add_helper.hpp>
+
 #ifdef SAMPLE_LIBRARY0_STATIC_DEFINE
 int static_library0 = 0;
 #endif
@@ -14,4 +17,8 @@ int sample_library0::factorial(int input) noexcept
   }
 
   return result;
+}
+
+int sample_library0::sum(int a, int b) noexcept {
+  return sample_library0::internal::add(a, b);
 }
