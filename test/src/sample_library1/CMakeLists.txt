@@ -1,6 +1,6 @@
 add_executable(test_sample_library1 test_sample_library1.cpp)
 
-set_target_properties(test_sample_library1 PROPERTIES FOLDER tests)
+set_target_properties(test_sample_library1 PROPERTIES FOLDER ${PROJECT_NAME}/tests)
 
 target_link_libraries(test_sample_library1
   PRIVATE

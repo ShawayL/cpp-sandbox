@@ -1,6 +1,6 @@
 add_executable(test_StringConverter test_StringConverter.cpp)
 
-set_target_properties(test_StringConverter PROPERTIES FOLDER tests)
+set_target_properties(test_StringConverter PROPERTIES FOLDER ${PROJECT_NAME}/tests)
 
 target_link_libraries(test_StringConverter
   PRIVATE

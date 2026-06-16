@@ -1,6 +1,6 @@
 add_executable(tests tests.cpp)
 
-set_target_properties(tests PROPERTIES FOLDER tests)
+set_target_properties(tests PROPERTIES FOLDER ${PROJECT_NAME}/tests)
 
 target_link_libraries(
   tests
