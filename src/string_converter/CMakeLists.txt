@@ -17,9 +17,7 @@ set_target_properties(string_converter PROPERTIES
 )
 
 # 设置vs项目文件夹
-if(WIN32 AND MSVC)
-  set_target_properties(string_converter PROPERTIES FOLDER ${PROJECT_NAME})
-endif()
+set_target_properties(string_converter PROPERTIES FOLDER ${PROJECT_NAME})
 
 # 生成定义了导出宏的头文件
 include(GenerateExportHeader)

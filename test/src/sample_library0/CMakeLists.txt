@@ -1,8 +1,6 @@
 add_executable(test_sample_library0 test_sample_library0.cpp)
 
-if(WIN32 AND MSVC)
-  set_target_properties(test_sample_library0 PROPERTIES FOLDER tests)
-endif()
+set_target_properties(test_sample_library0 PROPERTIES FOLDER tests)
 
 target_link_libraries(test_sample_library0
   PRIVATE

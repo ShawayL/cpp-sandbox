@@ -18,9 +18,7 @@ set_target_properties(gdal_test PROPERTIES
 )
 
 # 设置vs项目文件夹
-if(WIN32 AND MSVC)
-  set_target_properties(gdal_test PROPERTIES FOLDER ${PROJECT_NAME})
-endif()
+set_target_properties(gdal_test PROPERTIES FOLDER ${PROJECT_NAME})
 
 # 定义内部头文件列表 自动收集位于internal文件夹中的头文件 这些头文件仅在本模块内部使用 在install的时候不会被安装
 file(GLOB_RECURSE gdal_test_HDRS_PRIVATE

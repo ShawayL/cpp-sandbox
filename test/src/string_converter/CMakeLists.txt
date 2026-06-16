@@ -1,8 +1,6 @@
 add_executable(test_StringConverter test_StringConverter.cpp)
 
-if(WIN32 AND MSVC)
-  set_target_properties(test_StringConverter PROPERTIES FOLDER tests)
-endif()
+set_target_properties(test_StringConverter PROPERTIES FOLDER tests)
 
 target_link_libraries(test_StringConverter
   PRIVATE
