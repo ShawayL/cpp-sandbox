@@ -27,10 +27,6 @@ if(PROJECT_IS_TOP_LEVEL)
   set(CMAKE_CXX_EXTENSIONS OFF)
   # 顶层项目才启用测试支持
   include(CTest)
-  # 启用项目文件夹
-  if(WIN32 AND MSVC)
-    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-  endif()
 endif()
 
 # 设置项目选项
@@ -175,4 +171,9 @@ if(CPP_SANDBOX_INSTALL)
   )
 
   include(CPack)
+endif()
+
+# USE_FOLDERS需要写在顶层项目末尾
+if(PROJECT_IS_TOP_LEVEL)
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
