@@ -1,4 +1,9 @@
 add_executable(tests tests.cpp)
+
+if(WIN32 AND MSVC)
+  set_target_properties(tests PROPERTIES FOLDER tests)
+endif()
+
 target_link_libraries(
   tests
   PRIVATE
