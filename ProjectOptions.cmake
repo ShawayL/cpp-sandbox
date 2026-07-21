@@ -1,14 +1,9 @@
 include(CMakeDependentOption)
 
-macro(cpp_sandbox_setup_options)
+function(cpp_sandbox_setup_options)
   # 当作为子项目引入时，默认关闭测试和安装，避免影响父项目配置。
-  if(NOT PROJECT_IS_TOP_LEVEL)
-    option(CPP_SANDBOX_BUILD_TESTS "Build unit tests" OFF)
-    option(CPP_SANDBOX_INSTALL "Enable install targets" OFF)
-  else()
-    option(CPP_SANDBOX_BUILD_TESTS "Build unit tests" ON)
-    option(CPP_SANDBOX_INSTALL "Enable install targets" ON)
-  endif()
+  option(CPP_SANDBOX_BUILD_TESTS "Build unit tests" ${PROJECT_IS_TOP_LEVEL})
+  option(CPP_SANDBOX_INSTALL "Enable install targets" ${PROJECT_IS_TOP_LEVEL})
 
   # CPP_SANDBOX_INSTALL_DEPS: 是否安装依赖库
   # 仅在 CPP_SANDBOX_INSTALL 为 ON 时可启用，否则强制 OFF
@@ -36,4 +31,4 @@ macro(cpp_sandbox_setup_options)
       CPP_SANDBOX_BUILD_WITH_GDAL
     )
   endif()
-endmacro()
+endfunction()
