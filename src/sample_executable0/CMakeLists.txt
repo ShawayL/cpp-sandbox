@@ -17,13 +17,13 @@ set_target_properties(sample_executable0 PROPERTIES
 set_target_properties(sample_executable0 PROPERTIES FOLDER ${PROJECT_NAME})
 
 # 定义内部头文件列表 自动收集位于internal文件夹中的头文件 这些头文件仅在本模块内部使用 在install的时候不会被安装
-file(GLOB_RECURSE sample_executable0_HDRS_PRIVATE
+file(GLOB_RECURSE sample_executable0_HDRS_PRIVATE CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/internal/*.hpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/internal/*.h"
 )
 
 # 定义源代码列表 自动收集当前目录下的源代码
-file(GLOB_RECURSE sample_executable0_SRCS
+file(GLOB_RECURSE sample_executable0_SRCS CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )

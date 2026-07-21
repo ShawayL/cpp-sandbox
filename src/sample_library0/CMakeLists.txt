@@ -31,29 +31,29 @@ set(sample_library0_HDRS_DIRS
 )
 
 # 定义公开头文件列表 自动在指定目录下收集头文件 这些头文件在install的时候会被安装到头文件目录
-file(GLOB_RECURSE sample_library0_HDRS
+file(GLOB_RECURSE sample_library0_HDRS CONFIGURE_DEPENDS
   "${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0/*.hpp"
   "${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0/*.h"
 )
-file(GLOB_RECURSE sample_library0_HDRS_GENERATE
+file(GLOB_RECURSE sample_library0_HDRS_GENERATE CONFIGURE_DEPENDS
   "${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library0/*.hpp"
   "${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library0/*.h"
 )
 
 # 定义内部头文件列表 自动收集位于detail文件夹中的头文件 这些头文件可以被本项目内所有模块使用 但在install的时候不会被安装
-file(GLOB_RECURSE sample_library0_HDRS_DETAIL
+file(GLOB_RECURSE sample_library0_HDRS_DETAIL CONFIGURE_DEPENDS
   "${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0/detail/*.hpp"
   "${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0/detail/*.h"
 )
 
 # 定义内部头文件列表 自动收集位于internal文件夹中的头文件 这些头文件仅在本模块内部使用 在install的时候不会被安装
-file(GLOB_RECURSE sample_library0_HDRS_PRIVATE
+file(GLOB_RECURSE sample_library0_HDRS_PRIVATE CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/internal/*.hpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/internal/*.h"
 )
 
 # 定义源代码列表 自动收集当前目录下的源代码
-file(GLOB_RECURSE sample_library0_SRCS
+file(GLOB_RECURSE sample_library0_SRCS CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
