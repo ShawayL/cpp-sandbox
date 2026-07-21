@@ -93,17 +93,12 @@ set_target_properties(string_converter
     VERIFY_INTERFACE_HEADER_SETS ON
 )
 
-# 设置公开头文件包含目录 这些包含目录不仅对本项目起作用 对于使用本项目的其他项目也起作用
+# 设置头文件包含目录
 target_include_directories(string_converter
   PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-# 设置私有头文件包含目录 这些包含目录仅对于本项目起作用
-target_include_directories(string_converter
-  PUBLIC
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/internal
 )
