@@ -10,10 +10,6 @@ target_compile_definitions(sample_executable0 PRIVATE)
 
 # 设置项目属性
 set_target_properties(sample_executable0 PROPERTIES
-  CXX_VISIBILITY_PRESET hidden
-  VISIBILITY_INLINES_HIDDEN ON
-)
-set_target_properties(sample_executable0 PROPERTIES
   INSTALL_RPATH "$<$<PLATFORM_ID:Linux>:$ORIGIN/../${CMAKE_INSTALL_LIBDIR}>"
 )
 

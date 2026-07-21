@@ -10,10 +10,6 @@ target_compile_definitions(find_submatrix PRIVATE)
 
 # 设置项目属性
 set_target_properties(find_submatrix PROPERTIES
-  CXX_VISIBILITY_PRESET hidden
-  VISIBILITY_INLINES_HIDDEN ON
-)
-set_target_properties(find_submatrix PROPERTIES
   INSTALL_RPATH "$<$<PLATFORM_ID:Linux>:$ORIGIN/../${CMAKE_INSTALL_LIBDIR}>"
 )
 

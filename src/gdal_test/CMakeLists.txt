@@ -10,10 +10,6 @@ target_compile_definitions(gdal_test PRIVATE)
 
 # 设置项目属性
 set_target_properties(gdal_test PROPERTIES
-  CXX_VISIBILITY_PRESET hidden
-  VISIBILITY_INLINES_HIDDEN ON
-)
-set_target_properties(gdal_test PROPERTIES
   INSTALL_RPATH "$<$<PLATFORM_ID:Linux>:$ORIGIN/../${CMAKE_INSTALL_LIBDIR}>"
 )
 
