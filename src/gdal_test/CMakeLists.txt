@@ -32,11 +32,9 @@ file(GLOB_RECURSE gdal_test_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
-# 设置源码文件夹 方便在vs中查看
-if(WIN32 AND MSVC)
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${gdal_test_HDRS_PRIVATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${gdal_test_SRCS})
-endif()
+# 设置源码文件夹
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${gdal_test_HDRS_PRIVATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${gdal_test_SRCS})
 
 # 设置项目源码
 target_sources(gdal_test

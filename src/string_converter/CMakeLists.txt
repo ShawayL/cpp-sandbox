@@ -58,13 +58,11 @@ file(GLOB_RECURSE string_converter_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
-# 设置源码文件夹 方便在vs中查看
-if(WIN32 AND MSVC)
-  source_group(TREE ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/string_converter PREFIX "Header Files/cpp_sandbox/string_converter" FILES ${string_converter_HDRS})
-  source_group(TREE ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter PREFIX "Header Files/cpp_sandbox/string_converter" FILES ${string_converter_HDRS_GENERATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${string_converter_HDRS_PRIVATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${string_converter_SRCS})
-endif()
+# 设置源码文件夹
+source_group(TREE ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/string_converter PREFIX "Header Files/cpp_sandbox/string_converter" FILES ${string_converter_HDRS})
+source_group(TREE ${PROJECT_BINARY_DIR}/include/cpp_sandbox/string_converter PREFIX "Header Files/cpp_sandbox/string_converter" FILES ${string_converter_HDRS_GENERATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${string_converter_HDRS_PRIVATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${string_converter_SRCS})
 
 # 设置项目源码
 target_sources(string_converter

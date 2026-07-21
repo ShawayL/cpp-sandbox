@@ -58,13 +58,11 @@ file(GLOB_RECURSE sample_library0_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
-# 设置源码文件夹 方便在vs中查看
-if(WIN32 AND MSVC)
-  source_group(TREE ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0 PREFIX "Header Files/cpp_sandbox/sample_library0" FILES ${sample_library0_HDRS})
-  source_group(TREE ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library0 PREFIX "Header Files/cpp_sandbox/sample_library0" FILES ${sample_library0_HDRS_GENERATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${sample_library0_HDRS_PRIVATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${sample_library0_SRCS})
-endif()
+# 设置源码文件夹
+source_group(TREE ${PROJECT_SOURCE_DIR}/include/cpp_sandbox/sample_library0 PREFIX "Header Files/cpp_sandbox/sample_library0" FILES ${sample_library0_HDRS})
+source_group(TREE ${PROJECT_BINARY_DIR}/include/cpp_sandbox/sample_library0 PREFIX "Header Files/cpp_sandbox/sample_library0" FILES ${sample_library0_HDRS_GENERATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${sample_library0_HDRS_PRIVATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${sample_library0_SRCS})
 
 # 设置项目源码
 target_sources(sample_library0

@@ -32,11 +32,9 @@ file(GLOB_RECURSE sample_executable0_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
-# 设置源码文件夹 方便在vs中查看
-if(WIN32 AND MSVC)
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${sample_executable0_HDRS_PRIVATE})
-  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${sample_executable0_SRCS})
-endif()
+# 设置源码文件夹
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/internal PREFIX "Header Files/internal" FILES ${sample_executable0_HDRS_PRIVATE})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${sample_executable0_SRCS})
 
 # 设置项目源码
 target_sources(sample_executable0
