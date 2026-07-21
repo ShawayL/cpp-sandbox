@@ -39,6 +39,9 @@ cpp_sandbox_setup_options()
 include(Dependencies.cmake)
 cpp_sandbox_setup_dependencies()
 
+# 公共辅助函数
+include(CppSandboxHelpers)
+
 # 添加external目录
 add_subdirectory(external)
 
