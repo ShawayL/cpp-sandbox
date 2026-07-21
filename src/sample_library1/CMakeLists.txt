@@ -3,7 +3,8 @@ add_library(sample_library1)
 add_library(cpp_sandbox::sample_library1 ALIAS sample_library1)
 
 # 设置项目c++标准
-target_compile_features(sample_library1 PRIVATE cxx_std_17)
+target_compile_features(sample_library1 PRIVATE cxx_std_11)
+target_compile_features(sample_library1 INTERFACE cxx_std_11)
 
 # 设置项目宏定义
 target_compile_definitions(sample_library1 PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:SAMPLE_LIBRARY1_STATIC_DEFINE> PRIVATE)

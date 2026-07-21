@@ -4,6 +4,7 @@ add_library(cpp_sandbox::string_converter ALIAS string_converter)
 
 # 设置项目c++标准
 target_compile_features(string_converter PRIVATE cxx_std_17)
+target_compile_features(string_converter INTERFACE cxx_std_11)
 
 # 设置项目宏定义
 target_compile_definitions(string_converter PUBLIC PRIVATE)

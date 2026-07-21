@@ -23,11 +23,13 @@ include(CMakePackageConfigHelpers)
 
 # 作为顶层项目...
 if(PROJECT_IS_TOP_LEVEL)
-  # 确保使用 -std=c++xx 而非 -std=g++xx
-  set(CMAKE_CXX_EXTENSIONS OFF)
   # 顶层项目才启用测试支持
   include(CTest)
 endif()
+
+# 确保使用 -std=c++xx 而非 -std=g++xx
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 设置项目选项
 include(ProjectOptions.cmake)

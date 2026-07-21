@@ -3,7 +3,7 @@ add_executable(gdal_test)
 add_executable(cpp_sandbox::gdal_test ALIAS gdal_test)
 
 # 设置项目c++标准
-target_compile_features(gdal_test PRIVATE cxx_std_17)
+target_compile_features(gdal_test PRIVATE cxx_std_11)
 
 # 设置项目宏定义
 target_compile_definitions(gdal_test PRIVATE)

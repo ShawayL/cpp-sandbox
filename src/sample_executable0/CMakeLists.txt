@@ -3,7 +3,7 @@ add_executable(sample_executable0)
 add_executable(cpp_sandbox::sample_executable0 ALIAS sample_executable0)
 
 # 设置项目c++标准
-target_compile_features(sample_executable0 PRIVATE cxx_std_17)
+target_compile_features(sample_executable0 PRIVATE cxx_std_11)
 
 # 设置项目宏定义
 target_compile_definitions(sample_executable0 PRIVATE)

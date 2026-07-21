@@ -3,7 +3,7 @@ add_executable(find_submatrix)
 add_executable(cpp_sandbox::find_submatrix ALIAS find_submatrix)
 
 # 设置项目c++标准
-target_compile_features(find_submatrix PRIVATE cxx_std_17)
+target_compile_features(find_submatrix PRIVATE cxx_std_11)
 
 # 设置项目宏定义
 target_compile_definitions(find_submatrix PRIVATE)
