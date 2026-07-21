@@ -84,13 +84,20 @@ if(LINUX)
     endif()
     get_target_property(LIB_PATH ${TARGET} IMPORTED_LOCATION)
     if(NOT LIB_PATH)
-      set(LIB_PATH $<TARGET_FILE:${TARGET}>)
+      # 部分第三方库(Boost、Qt5、jsoncpp、shapelib 等)由 CMake 生成的 Config 包
+      # 只设置按配置区分的 IMPORTED_LOCATION_<CONFIG>，而非通用的 IMPORTED_LOCATION
+      string(TOUPPER "${CMAKE_BUILD_TYPE}" _build_type_upper)
+      foreach(_config_suffix ${_build_type_upper} RELEASE NOCONFIG)
+        get_target_property(LIB_PATH ${TARGET} IMPORTED_LOCATION_${_config_suffix})
+        if(LIB_PATH)
+          break()
+        endif()
+      endforeach()
+      unset(_build_type_upper)
+      unset(_config_suffix)
     endif()
     if(NOT LIB_PATH)
-      message(
-        WARNING
-        "Target ${TARGET} does not have a library file associated."
-      )
+      message(WARNING "Target ${TARGET} does not have a library file associated.")
       set(${OUT_VAR} "" PARENT_SCOPE)
       return()
     endif()
