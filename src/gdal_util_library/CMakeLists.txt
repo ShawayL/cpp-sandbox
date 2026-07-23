@@ -28,3 +28,5 @@ target_link_libraries(gdal_util_library
   PRIVATE
     GDAL::GDAL
 )
+
+cpp_sandbox_install_target(gdal_util_library)

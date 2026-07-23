@@ -25,3 +25,5 @@ target_link_libraries(gdal_test
     gdal_util_library
     GDAL::GDAL
 )
+
+cpp_sandbox_install_target(gdal_test)

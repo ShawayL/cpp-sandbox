@@ -28,3 +28,5 @@ target_link_libraries(string_converter
   PRIVATE
     $<$<NOT:$<PLATFORM_ID:Windows>>:Iconv::Iconv>
 )
+
+cpp_sandbox_install_target(string_converter)

@@ -49,7 +49,7 @@ add_subdirectory(external)
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-operator-names")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 # 设置链接标志
 include(CheckLinkerFlag)
@@ -123,30 +123,6 @@ endmacro()
 
 # 安装目标
 if(CPP_SANDBOX_INSTALL)
-  set(cpp_sandbox_install_targets
-    sample_library0
-    sample_library1
-    sample_executable0
-    find_submatrix
-    string_converter
-  )
-  if(CPP_SANDBOX_BUILD_WITH_GDAL)
-    list(APPEND cpp_sandbox_install_targets
-      gdal_util_library
-      gdal_test
-    )
-  endif()
-
-  install(
-    TARGETS
-      ${cpp_sandbox_install_targets}
-    EXPORT cpp_sandboxTargets
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  )
-
   install(
     EXPORT cpp_sandboxTargets
     NAMESPACE cpp_sandbox::

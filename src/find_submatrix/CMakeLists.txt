@@ -23,3 +23,5 @@ target_link_libraries(find_submatrix
   PUBLIC
   PRIVATE
 )
+
+cpp_sandbox_install_target(find_submatrix)

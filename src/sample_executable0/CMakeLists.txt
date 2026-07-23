@@ -25,3 +25,5 @@ target_link_libraries(sample_executable0
     cpp_sandbox::sample_library0
     cpp_sandbox::sample_library1
 )
+
+cpp_sandbox_install_target(sample_executable0)

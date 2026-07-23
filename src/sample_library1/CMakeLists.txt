@@ -28,3 +28,5 @@ target_link_libraries(sample_library1
   PRIVATE
     cpp_sandbox::sample_library0
 )
+
+cpp_sandbox_install_target(sample_library1)

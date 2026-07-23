@@ -126,3 +126,28 @@ function(cpp_sandbox_setup_sources TARGET)
     )
   endif()
 endfunction()
+
+# ==============================================================================
+# cpp_sandbox_install_target — 为目标添加安装规则
+# ==============================================================================
+#
+# 用法:
+#   cpp_sandbox_install_target(<target>)
+#
+# 仅在 CPP_SANDBOX_INSTALL 为 ON 时生效。
+# 所有目标共享同一个 EXPORT 名称 cpp_sandboxTargets。
+# 对于没有 FILE_SET headers 的可执行文件，CMake 会安全跳过。
+function(cpp_sandbox_install_target TARGET)
+  if(NOT CPP_SANDBOX_INSTALL)
+    return()
+  endif()
+
+  install(
+    TARGETS ${TARGET}
+    EXPORT cpp_sandboxTargets
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
+endfunction()
