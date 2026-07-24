@@ -4,10 +4,19 @@
 #include <queue>
 #include <set>
 #include <algorithm>
-using namespace std;
+using std::cout;
+using std::endl;
+using std::max;
+using std::pair;
+using std::queue;
+using std::set;
+using std::setw;
+using std::sort;
+using std::string;
+using std::vector;
 
 // 构建二维前缀和
-void buildPrefixSum(const vector<vector<int>>& grid, vector<vector<int>>& sum) {
+void BuildPrefixSum(const vector<vector<int>>& grid, vector<vector<int>>& sum) {
     size_t m = grid.size(), n = grid[0].size();
     sum.assign(m + 1, vector<int>(n + 1, 0));
     for(size_t i = 1; i <= m; ++i)
@@ -16,23 +25,23 @@ void buildPrefixSum(const vector<vector<int>>& grid, vector<vector<int>>& sum) {
 }
 
 // 查找所有 x 行 y 列 的全 1 子矩阵左上角坐标
-vector<pair<int, int>> findSubmatrices(
+vector<pair<int, int>> FindSubmatrices(
     const vector<vector<int>>& grid,
     int x, int y,
     vector<vector<int>>& sum,
-    bool checkOverlap = false
+    bool check_overlap = false
 ) {
     int m = grid.size(), n = grid[0].size();
-    buildPrefixSum(grid, sum);
+    BuildPrefixSum(grid, sum);
     // 标记已被覆盖的位置
     vector<vector<bool>> covered(m, vector<bool>(n, false));
     vector<pair<int, int>> res;
     for(int i = 0; i <= m - x; ++i) {
         for(int j = 0; j <= n - y; ++j) {
-            int areaSum = sum[i+x][j+y] - sum[i][j+y] - sum[i+x][j] + sum[i][j];
-            if(areaSum == x * y) 
+            int area_sum = sum[i+x][j+y] - sum[i][j+y] - sum[i+x][j] + sum[i][j];
+            if(area_sum == x * y) 
             {
-                if(!checkOverlap)
+                if(!check_overlap)
                     res.emplace_back(i, j);
                 else {
                     // 检查该区域是否已被覆盖
@@ -55,9 +64,9 @@ vector<pair<int, int>> findSubmatrices(
 }
 
 // 对子矩阵左上角坐标进行聚类，能通过上下左右平移连接起来的归为一类
-vector<vector<pair<int, int>>> clusterSubmatrices(const vector<pair<int, int>>& rects, int x, int y) {
+vector<vector<pair<int, int>>> ClusterSubmatrices(const vector<pair<int, int>>& rects, int x, int y) {
     // 建立所有rect坐标的set，便于查找
-    set<pair<int, int>> rectSet(rects.begin(), rects.end());
+    set<pair<int, int>> rect_set(rects.begin(), rects.end());
     set<pair<int, int>> visited;
     vector<vector<pair<int, int>>> clusters;
 
@@ -81,7 +90,7 @@ vector<vector<pair<int, int>>> clusterSubmatrices(const vector<pair<int, int>>& 
                 int ny = cur.second + dy[d];
                 pair<int, int> np(nx, ny);
                 // 判断是否相邻（即子矩阵左上角是否正好相邻）
-                if (rectSet.count(np) && !visited.count(np)) {
+                if (rect_set.count(np) && !visited.count(np)) {
                     visited.insert(np);
                     q.push(np);
                 }
@@ -95,7 +104,7 @@ vector<vector<pair<int, int>>> clusterSubmatrices(const vector<pair<int, int>>& 
 // 对每个聚类，计算其中有多少个不重叠的网格区域，并返回每类中的这些区域
 // 输入：clusters（每类的所有左上角坐标），x, y（子矩阵大小）
 // 输出：vector<vector<pair<int,int>>>，每个聚类中不重叠子矩阵的左上角坐标集合
-vector<vector<pair<int, int>>> getNonOverlappingInClusters(
+vector<vector<pair<int, int>>> GetNonOverlappingInClusters(
     const vector<vector<pair<int, int>>>& clusters,
     int x, int y
 ) {
@@ -105,13 +114,13 @@ vector<vector<pair<int, int>>> getNonOverlappingInClusters(
         vector<pair<int, int>> rects = cluster;
         sort(rects.begin(), rects.end());
         // 计算该聚类的边界
-        int maxRow = 0, maxCol = 0;
+        int max_row = 0, max_col = 0;
         for(const auto& p : rects) {
-            maxRow = max(maxRow, p.first + x);
-            maxCol = max(maxCol, p.second + y);
+            max_row = max(max_row, p.first + x);
+            max_col = max(max_col, p.second + y);
         }
         // 标记覆盖
-        vector<vector<bool>> covered(maxRow, vector<bool>(maxCol, false));
+        vector<vector<bool>> covered(max_row, vector<bool>(max_col, false));
         vector<pair<int, int>> selected;
         for(const auto& p : rects) {
             bool overlap = false;
@@ -130,7 +139,7 @@ vector<vector<pair<int, int>>> getNonOverlappingInClusters(
 }
 
 // 生成测试用的二值矩阵
-vector<vector<int>> generateTestMatrix() {
+vector<vector<int>> GenerateTestMatrix() {
     vector<vector<int>> grid = {
         {1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
@@ -147,7 +156,7 @@ vector<vector<int>> generateTestMatrix() {
 }
 
 // 打印二维数组（支持倒序显示，带坐标轴和行列标记，x轴在下方且对齐）
-void printMatrixWithAxis(const vector<vector<int>>& mat, const string& title, int width=2) {
+void PrintMatrixWithAxis(const vector<vector<int>>& mat, const string& title, int width=2) {
     int m = static_cast<int>(mat.size());
     int n = static_cast<int>(mat[0].size());
 
@@ -176,18 +185,18 @@ void printMatrixWithAxis(const vector<vector<int>>& mat, const string& title, in
 }
 
 int main() {
-    vector<vector<int>> grid = generateTestMatrix();
+    vector<vector<int>> grid = GenerateTestMatrix();
     int x = 3, y = 3; // 查找3行3列的全1子矩阵
 
     // 输出原始二值图
-    printMatrixWithAxis(grid, "Original Binary Matrix (10x10):");
+    PrintMatrixWithAxis(grid, "Original Binary Matrix (10x10):");
 
     // 计算前缀和并查找所有可行的子矩阵
     vector<vector<int>> sum;
-    auto rects = findSubmatrices(grid, x, y, sum);
+    auto rects = FindSubmatrices(grid, x, y, sum);
 
     // 输出前缀和图
-    //printMatrixWithAxis(sum, "Prefix Sum Matrix (11x11):", 4);
+    //PrintMatrixWithAxis(sum, "Prefix Sum Matrix (11x11):", 4);
 
     // 输出所有可行的左上角坐标
     cout << "All top-left coordinates of " << x << "x" << y << " submatrices full of 1s:" << endl;
@@ -197,14 +206,14 @@ int main() {
 
     // 查找不重叠的子矩阵
     vector<vector<int>> sum2;
-    auto nonOverlapRects = findSubmatrices(grid, x, y, sum2, true);
+    auto non_overlap_rects = FindSubmatrices(grid, x, y, sum2, true);
     cout << "Non-overlapping top-left coordinates of " << x << "x" << y << " submatrices (maximal set):" << endl;
-    for(const auto& p : nonOverlapRects)
+    for(const auto& p : non_overlap_rects)
         cout << "(row=" << p.first << ", col=" << p.second << ")" << endl;
     cout << endl;
 
     // 聚类融合
-    auto clusters = clusterSubmatrices(rects, x, y);
+    auto clusters = ClusterSubmatrices(rects, x, y);
 
     // 输出聚类结果
     cout << "Clusters of submatrices (by adjacency):" << endl;
@@ -219,14 +228,14 @@ int main() {
     cout << endl;
 
     // 统计每个聚类中不重叠的网格区域
-    auto clusterNonOverlap = getNonOverlappingInClusters(clusters, x, y);
+    auto cluster_non_overlap = GetNonOverlappingInClusters(clusters, x, y);
     cout << "Non-overlapping submatrices in each cluster:" << endl;
-    for(size_t i = 0; i < clusterNonOverlap.size(); ++i) {
+    for(size_t i = 0; i < cluster_non_overlap.size(); ++i) {
         cout << "Cluster #" << (i+1) << ": ";
-        for(const auto& p : clusterNonOverlap[i]) {
+        for(const auto& p : cluster_non_overlap[i]) {
             cout << "(" << p.first << "," << p.second << ") ";
         }
-        cout << ", count = " << clusterNonOverlap[i].size() << endl;
+        cout << ", count = " << cluster_non_overlap[i].size() << endl;
     }
     cout << endl;
 

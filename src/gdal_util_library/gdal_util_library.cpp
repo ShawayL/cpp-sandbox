@@ -4,7 +4,7 @@
 #include <gdal_alg.h>
 #include <gdalwarper.h>
 
-void testGDALAutoCreateWarpedVRT()
+void TestGdalAutoCreateWarpedVrt()
 {
     GDALAllRegister();
 
@@ -15,17 +15,17 @@ void testGDALAutoCreateWarpedVRT()
     }
     printf("Dataset opened successfully.\n");
 
-    GDALDatasetH warpedDataset = GDALAutoCreateWarpedVRT(dataset, nullptr, nullptr, GRA_NearestNeighbour, 1.0, nullptr);
-    if (warpedDataset == nullptr) {
+    GDALDatasetH warped_dataset = GDALAutoCreateWarpedVRT(dataset, nullptr, nullptr, GRA_NearestNeighbour, 1.0, nullptr);
+    if (warped_dataset == nullptr) {
         printf("Failed to create warped dataset.\n");
         GDALClose(dataset);
         return;
     }
     printf("Warped dataset created successfully.\n");
 
-    void* transformerArg = GDALCreateGenImgProjTransformer2(dataset, warpedDataset, nullptr);
-    GDALDestroyTransformer(transformerArg);
+    void* transformer_arg = GDALCreateGenImgProjTransformer2(dataset, warped_dataset, nullptr);
+    GDALDestroyTransformer(transformer_arg);
 
-    GDALClose(warpedDataset);
+    GDALClose(warped_dataset);
     GDALClose(dataset);
 }

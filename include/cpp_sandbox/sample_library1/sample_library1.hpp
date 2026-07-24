@@ -5,19 +5,19 @@
 
 namespace sample_library1 {
 
-SAMPLE_LIBRARY1_EXPORT int factorial(int) noexcept;
+SAMPLE_LIBRARY1_EXPORT int Factorial(int) noexcept;
 
-SAMPLE_LIBRARY1_EXPORT int factorial_noexp(int) noexcept;
+SAMPLE_LIBRARY1_EXPORT int FactorialNoexp(int) noexcept;
 
 // Demonstrates calling sample_library0's internal detail header: returns a * b.
-SAMPLE_LIBRARY1_EXPORT int multiply(int a, int b) noexcept;
+SAMPLE_LIBRARY1_EXPORT int Multiply(int a, int b) noexcept;
 
-constexpr int factorial_constexpr(int input) noexcept {
+constexpr int FactorialConstexpr(int input) noexcept {
   if (input == 0) {
     return 1;
   }
 
-  return input * factorial_constexpr(input - 1);
+  return input * FactorialConstexpr(input - 1);
 }
 
 }  // namespace sample_library1

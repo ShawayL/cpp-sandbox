@@ -7,7 +7,7 @@
 int static_library0 = 0;
 #endif
 
-int sample_library0::factorial(int input) noexcept
+int sample_library0::Factorial(int input) noexcept
 {
   int result = 1;
 
@@ -19,6 +19,6 @@ int sample_library0::factorial(int input) noexcept
   return result;
 }
 
-int sample_library0::sum(int a, int b) noexcept {
-  return sample_library0::internal::add(a, b);
+int sample_library0::Sum(int a, int b) noexcept {
+  return sample_library0::internal::AddHelper(a, b);
 }

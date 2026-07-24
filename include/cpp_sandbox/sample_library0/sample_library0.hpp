@@ -5,17 +5,17 @@
 
 namespace sample_library0 {
 
-SAMPLE_LIBRARY0_EXPORT int factorial(int) noexcept;
+SAMPLE_LIBRARY0_EXPORT int Factorial(int) noexcept;
 
 // Public API that internally delegates to the module-local internal helper.
-SAMPLE_LIBRARY0_EXPORT int sum(int a, int b) noexcept;
+SAMPLE_LIBRARY0_EXPORT int Sum(int a, int b) noexcept;
 
-constexpr int factorial_constexpr(int input) noexcept {
+constexpr int FactorialConstexpr(int input) noexcept {
   if (input == 0) {
     return 1;
   }
 
-  return input * factorial_constexpr(input - 1);
+  return input * FactorialConstexpr(input - 1);
 }
 
 }  // namespace sample_library0

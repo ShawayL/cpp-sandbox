@@ -2,6 +2,6 @@
 
 int main()
 {
-    testGDALAutoCreateWarpedVRT();
+    TestGdalAutoCreateWarpedVrt();
     return 0;
 }

@@ -2,105 +2,105 @@
 #include <cpp_sandbox/sample_library1/sample_library1.hpp>
 
 // ============================================================================
-// factorial
+// Factorial
 // ============================================================================
 
-TEST(sample_library1, factorial_zero) {
-    EXPECT_EQ(sample_library1::factorial(0), 1);
+TEST(SampleLibrary1, FactorialZero) {
+    EXPECT_EQ(sample_library1::Factorial(0), 1);
 }
 
-TEST(sample_library1, factorial_one) {
-    EXPECT_EQ(sample_library1::factorial(1), 1);
+TEST(SampleLibrary1, FactorialOne) {
+    EXPECT_EQ(sample_library1::Factorial(1), 1);
 }
 
-TEST(sample_library1, factorial_two) {
-    EXPECT_EQ(sample_library1::factorial(2), 2);
+TEST(SampleLibrary1, FactorialTwo) {
+    EXPECT_EQ(sample_library1::Factorial(2), 2);
 }
 
-TEST(sample_library1, factorial_three) {
-    EXPECT_EQ(sample_library1::factorial(3), 6);
+TEST(SampleLibrary1, FactorialThree) {
+    EXPECT_EQ(sample_library1::Factorial(3), 6);
 }
 
-TEST(sample_library1, factorial_ten) {
-    EXPECT_EQ(sample_library1::factorial(10), 3628800);
-}
-
-// ============================================================================
-// factorial_noexp
-// ============================================================================
-
-TEST(sample_library1, factorial_noexp_zero) {
-    EXPECT_EQ(sample_library1::factorial_noexp(0), 1);
-}
-
-TEST(sample_library1, factorial_noexp_one) {
-    EXPECT_EQ(sample_library1::factorial_noexp(1), 1);
-}
-
-TEST(sample_library1, factorial_noexp_two) {
-    EXPECT_EQ(sample_library1::factorial_noexp(2), 2);
-}
-
-TEST(sample_library1, factorial_noexp_three) {
-    EXPECT_EQ(sample_library1::factorial_noexp(3), 6);
-}
-
-TEST(sample_library1, factorial_noexp_ten) {
-    EXPECT_EQ(sample_library1::factorial_noexp(10), 3628800);
+TEST(SampleLibrary1, FactorialTen) {
+    EXPECT_EQ(sample_library1::Factorial(10), 3628800);
 }
 
 // ============================================================================
-// multiply
+// FactorialNoexp
 // ============================================================================
 
-TEST(sample_library1, multiply_positive) {
-    EXPECT_EQ(sample_library1::multiply(3, 5), 15);
+TEST(SampleLibrary1, FactorialNoexpZero) {
+    EXPECT_EQ(sample_library1::FactorialNoexp(0), 1);
 }
 
-TEST(sample_library1, multiply_negative_single) {
-    EXPECT_EQ(sample_library1::multiply(-3, 5), -15);
+TEST(SampleLibrary1, FactorialNoexpOne) {
+    EXPECT_EQ(sample_library1::FactorialNoexp(1), 1);
 }
 
-TEST(sample_library1, multiply_negative_both) {
-    EXPECT_EQ(sample_library1::multiply(-3, -5), 15);
+TEST(SampleLibrary1, FactorialNoexpTwo) {
+    EXPECT_EQ(sample_library1::FactorialNoexp(2), 2);
 }
 
-TEST(sample_library1, multiply_with_zero) {
-    EXPECT_EQ(sample_library1::multiply(0, 5), 0);
-    EXPECT_EQ(sample_library1::multiply(5, 0), 0);
-    EXPECT_EQ(sample_library1::multiply(0, 0), 0);
+TEST(SampleLibrary1, FactorialNoexpThree) {
+    EXPECT_EQ(sample_library1::FactorialNoexp(3), 6);
 }
 
-TEST(sample_library1, multiply_with_one) {
-    EXPECT_EQ(sample_library1::multiply(1, 7), 7);
-    EXPECT_EQ(sample_library1::multiply(7, 1), 7);
+TEST(SampleLibrary1, FactorialNoexpTen) {
+    EXPECT_EQ(sample_library1::FactorialNoexp(10), 3628800);
 }
 
 // ============================================================================
-// factorial_constexpr
+// Multiply
 // ============================================================================
 
-TEST(sample_library1, factorial_constexpr_zero) {
-    constexpr int result = sample_library1::factorial_constexpr(0);
-    EXPECT_EQ(result, 1);
+TEST(SampleLibrary1, MultiplyPositive) {
+    EXPECT_EQ(sample_library1::Multiply(3, 5), 15);
 }
 
-TEST(sample_library1, factorial_constexpr_one) {
-    constexpr int result = sample_library1::factorial_constexpr(1);
-    EXPECT_EQ(result, 1);
+TEST(SampleLibrary1, MultiplyNegativeSingle) {
+    EXPECT_EQ(sample_library1::Multiply(-3, 5), -15);
 }
 
-TEST(sample_library1, factorial_constexpr_two) {
-    constexpr int result = sample_library1::factorial_constexpr(2);
-    EXPECT_EQ(result, 2);
+TEST(SampleLibrary1, MultiplyNegativeBoth) {
+    EXPECT_EQ(sample_library1::Multiply(-3, -5), 15);
 }
 
-TEST(sample_library1, factorial_constexpr_three) {
-    constexpr int result = sample_library1::factorial_constexpr(3);
-    EXPECT_EQ(result, 6);
+TEST(SampleLibrary1, MultiplyWithZero) {
+    EXPECT_EQ(sample_library1::Multiply(0, 5), 0);
+    EXPECT_EQ(sample_library1::Multiply(5, 0), 0);
+    EXPECT_EQ(sample_library1::Multiply(0, 0), 0);
 }
 
-TEST(sample_library1, factorial_constexpr_ten) {
-    constexpr int result = sample_library1::factorial_constexpr(10);
-    EXPECT_EQ(result, 3628800);
+TEST(SampleLibrary1, MultiplyWithOne) {
+    EXPECT_EQ(sample_library1::Multiply(1, 7), 7);
+    EXPECT_EQ(sample_library1::Multiply(7, 1), 7);
+}
+
+// ============================================================================
+// FactorialConstexpr
+// ============================================================================
+
+TEST(SampleLibrary1, FactorialConstexprZero) {
+    constexpr int kResult = sample_library1::FactorialConstexpr(0);
+    EXPECT_EQ(kResult, 1);
+}
+
+TEST(SampleLibrary1, FactorialConstexprOne) {
+    constexpr int kResult = sample_library1::FactorialConstexpr(1);
+    EXPECT_EQ(kResult, 1);
+}
+
+TEST(SampleLibrary1, FactorialConstexprTwo) {
+    constexpr int kResult = sample_library1::FactorialConstexpr(2);
+    EXPECT_EQ(kResult, 2);
+}
+
+TEST(SampleLibrary1, FactorialConstexprThree) {
+    constexpr int kResult = sample_library1::FactorialConstexpr(3);
+    EXPECT_EQ(kResult, 6);
+}
+
+TEST(SampleLibrary1, FactorialConstexprTen) {
+    constexpr int kResult = sample_library1::FactorialConstexpr(10);
+    EXPECT_EQ(kResult, 3628800);
 }

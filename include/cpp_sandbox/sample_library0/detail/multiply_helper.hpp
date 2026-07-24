@@ -12,7 +12,7 @@ namespace detail {
 // Internal helper: returns a * b.
 // Exported with SAMPLE_LIBRARY0_EXPORT because the default build is a shared
 // library and this symbol is called across the module (DLL) boundary.
-SAMPLE_LIBRARY0_EXPORT int multiply(int a, int b) noexcept;
+SAMPLE_LIBRARY0_EXPORT int MultiplyHelper(int a, int b) noexcept;
 
 }  // namespace detail
 }  // namespace sample_library0

@@ -12,7 +12,7 @@ namespace sample_library0 {
 namespace internal {
 
 // Internal helper shared across sample_library0's own translation units.
-int add(int a, int b) noexcept;
+int AddHelper(int a, int b) noexcept;
 
 }  // namespace internal
 }  // namespace sample_library0

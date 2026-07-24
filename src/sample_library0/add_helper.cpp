@@ -2,6 +2,6 @@
 // internal/ directory as a PRIVATE include path.
 #include <add_helper.hpp>
 
-int sample_library0::internal::add(int a, int b) noexcept {
+int sample_library0::internal::AddHelper(int a, int b) noexcept {
   return a + b;
 }

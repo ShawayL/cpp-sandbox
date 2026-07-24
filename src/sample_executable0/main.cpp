@@ -3,14 +3,14 @@
 #include <iostream>
 
 int main() {
-  std::cout << "sample_library0::factorial(5) = "
-            << sample_library0::factorial(5) << std::endl;
+  std::cout << "sample_library0::Factorial(5) = "
+            << sample_library0::Factorial(5) << std::endl;
 
-  std::cout << "sample_library1::factorial(6) = "
-            << sample_library1::factorial(6) << std::endl;
+  std::cout << "sample_library1::Factorial(6) = "
+            << sample_library1::Factorial(6) << std::endl;
 
-  //std::cout << "sample_library1::factorial_noexp(6) = "
-  //          << sample_library1::factorial_noexp(6) << std::endl;
+  //std::cout << "sample_library1::FactorialNoexp(6) = "
+  //          << sample_library1::FactorialNoexp(6) << std::endl;
 
   return 0;
 }

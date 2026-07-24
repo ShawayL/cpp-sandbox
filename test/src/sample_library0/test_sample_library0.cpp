@@ -2,76 +2,76 @@
 #include <cpp_sandbox/sample_library0/sample_library0.hpp>
 
 // ============================================================================
-// factorial
+// Factorial
 // ============================================================================
 
-TEST(sample_library0, factorial_zero) {
-    EXPECT_EQ(sample_library0::factorial(0), 1);
+TEST(SampleLibrary0, FactorialZero) {
+    EXPECT_EQ(sample_library0::Factorial(0), 1);
 }
 
-TEST(sample_library0, factorial_one) {
-    EXPECT_EQ(sample_library0::factorial(1), 1);
+TEST(SampleLibrary0, FactorialOne) {
+    EXPECT_EQ(sample_library0::Factorial(1), 1);
 }
 
-TEST(sample_library0, factorial_two) {
-    EXPECT_EQ(sample_library0::factorial(2), 2);
+TEST(SampleLibrary0, FactorialTwo) {
+    EXPECT_EQ(sample_library0::Factorial(2), 2);
 }
 
-TEST(sample_library0, factorial_three) {
-    EXPECT_EQ(sample_library0::factorial(3), 6);
+TEST(SampleLibrary0, FactorialThree) {
+    EXPECT_EQ(sample_library0::Factorial(3), 6);
 }
 
-TEST(sample_library0, factorial_ten) {
-    EXPECT_EQ(sample_library0::factorial(10), 3628800);
-}
-
-// ============================================================================
-// sum
-// ============================================================================
-
-TEST(sample_library0, sum_positive) {
-    EXPECT_EQ(sample_library0::sum(3, 5), 8);
-}
-
-TEST(sample_library0, sum_negative) {
-    EXPECT_EQ(sample_library0::sum(-3, -5), -8);
-}
-
-TEST(sample_library0, sum_mixed_signs) {
-    EXPECT_EQ(sample_library0::sum(10, -3), 7);
-}
-
-TEST(sample_library0, sum_with_zero) {
-    EXPECT_EQ(sample_library0::sum(0, 5), 5);
-    EXPECT_EQ(sample_library0::sum(5, 0), 5);
-    EXPECT_EQ(sample_library0::sum(0, 0), 0);
+TEST(SampleLibrary0, FactorialTen) {
+    EXPECT_EQ(sample_library0::Factorial(10), 3628800);
 }
 
 // ============================================================================
-// factorial_constexpr
+// Sum
 // ============================================================================
 
-TEST(sample_library0, factorial_constexpr_zero) {
-    constexpr int result = sample_library0::factorial_constexpr(0);
-    EXPECT_EQ(result, 1);
+TEST(SampleLibrary0, SumPositive) {
+    EXPECT_EQ(sample_library0::Sum(3, 5), 8);
 }
 
-TEST(sample_library0, factorial_constexpr_one) {
-    constexpr int result = sample_library0::factorial_constexpr(1);
-    EXPECT_EQ(result, 1);
+TEST(SampleLibrary0, SumNegative) {
+    EXPECT_EQ(sample_library0::Sum(-3, -5), -8);
 }
 
-TEST(sample_library0, factorial_constexpr_two) {
-    constexpr int result = sample_library0::factorial_constexpr(2);
-    EXPECT_EQ(result, 2);
+TEST(SampleLibrary0, SumMixedSigns) {
+    EXPECT_EQ(sample_library0::Sum(10, -3), 7);
 }
 
-TEST(sample_library0, factorial_constexpr_three) {
-    constexpr int result = sample_library0::factorial_constexpr(3);
-    EXPECT_EQ(result, 6);
+TEST(SampleLibrary0, SumWithZero) {
+    EXPECT_EQ(sample_library0::Sum(0, 5), 5);
+    EXPECT_EQ(sample_library0::Sum(5, 0), 5);
+    EXPECT_EQ(sample_library0::Sum(0, 0), 0);
 }
 
-TEST(sample_library0, factorial_constexpr_ten) {
-    constexpr int result = sample_library0::factorial_constexpr(10);
-    EXPECT_EQ(result, 3628800);
+// ============================================================================
+// FactorialConstexpr
+// ============================================================================
+
+TEST(SampleLibrary0, FactorialConstexprZero) {
+    constexpr int kResult = sample_library0::FactorialConstexpr(0);
+    EXPECT_EQ(kResult, 1);
+}
+
+TEST(SampleLibrary0, FactorialConstexprOne) {
+    constexpr int kResult = sample_library0::FactorialConstexpr(1);
+    EXPECT_EQ(kResult, 1);
+}
+
+TEST(SampleLibrary0, FactorialConstexprTwo) {
+    constexpr int kResult = sample_library0::FactorialConstexpr(2);
+    EXPECT_EQ(kResult, 2);
+}
+
+TEST(SampleLibrary0, FactorialConstexprThree) {
+    constexpr int kResult = sample_library0::FactorialConstexpr(3);
+    EXPECT_EQ(kResult, 6);
+}
+
+TEST(SampleLibrary0, FactorialConstexprTen) {
+    constexpr int kResult = sample_library0::FactorialConstexpr(10);
+    EXPECT_EQ(kResult, 3628800);
 }

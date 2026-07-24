@@ -9,14 +9,14 @@
 int static_library1 = 0;
 #endif
 
-int sample_library1::factorial(int input) noexcept {
-  return sample_library0::factorial(input);
+int sample_library1::Factorial(int input) noexcept {
+  return sample_library0::Factorial(input);
 }
 
-int sample_library1::factorial_noexp(int input) noexcept {
-  return sample_library1::factorial(input);
+int sample_library1::FactorialNoexp(int input) noexcept {
+  return sample_library1::Factorial(input);
 }
 
-int sample_library1::multiply(int a, int b) noexcept {
-  return sample_library0::detail::multiply(a, b);
+int sample_library1::Multiply(int a, int b) noexcept {
+  return sample_library0::detail::MultiplyHelper(a, b);
 }
