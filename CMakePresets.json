@@ -11,7 +11,9 @@
             "hidden": true,
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {}
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
         },
         {
             "name": "windows-base",
