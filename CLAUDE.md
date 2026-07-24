@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 通用规则
+
+项目中所有路径必须使用相对路径，禁止使用绝对路径，保证代码换一台机器、换一个路径仍可编译通过。
+
 ## 构建命令
 
 优先使用 `out/build/` 下已有的最新 preset；若无则默认 Linux 用 `ninja-gcc-reldeb`、Windows 用 `vs2026-reldeb`。如果用户未明确指定 preset，AI 应先 `ls out/build/` 查找已有构建目录，取最新的使用。
@@ -74,6 +78,8 @@ CMakeLists.txt              # 顶层入口：项目声明、选项、依赖、�
 
 - **小型库**（纯头文件、精简支持 CMake 子项目）：放入 `external/`，通过 `add_subdirectory` 引入
 - **大型库**：在 `Dependencies.cmake` 中通过 CPM 或 `find_package` 引入
+
+查找第三方库时必须保证通用性，不得硬编码本机路径。应使用 CMake 标准机制（`find_package`、`find_path`、`find_library` 等），确保换一台机器、换一种安装方式、换一个路径仍可正常运行。如确需处理本机特殊路径，经用户同意后可在 `CMakeUserPresets.json` 中配置。
 
 ## 添加新模块的规范
 
